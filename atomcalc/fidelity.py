@@ -36,52 +36,7 @@ def plot_population_diagonalization(tlist, result, dim):
 
 
 class Level:
-    r"""Calculate ∂H/∂ϵ for the standard equations of motion.
-
-    Args:
-        objectives (list): List of :class:`.Objective` instances
-        i_objective (int): The index of the objective in `objectives` whose
-            equation of motion the derivative should be calculated.
-        pulses (list): The list of pulses occuring in `objectives`
-        pulses_mapping (list): The mapping of elements of `pulses` to the
-            components of `objectives`, as returned by
-            :func:`.extract_controls_mapping`
-        i_pulse (int): The index of the pulse in `pulses` for which to
-            calculate the derivative
-        time_index (int): The index of the value in ``pulses[i_pulse]`` that
-            should be plugged in to ∂H/∂ϵ. Not used, as this routine only
-            considers equations of motion that are linear in the controls.
-
-    Returns:
-        callable: The quantum operator or super-operator that
-        represents ∂H/∂ϵ. In general, the return type can be any callable `mu`
-        so that ``mu(state)`` calculates the result of applying ∂H/∂ϵ to
-        `state`. In most cases, a :class:`~qutip.Qobj` will be returned, which
-        is just the most convenient example of an appropriate callable.
-
-    This function covers the following cases:
-
-    * the :attr:`~.Objective.H` attribute of the objective contains a
-      Hamiltonian, there are no :attr:`~.Objective.c_ops` (Schrödinger
-      equation: the abstract H in ∂H/∂ϵ is the Hamiltonian directly)
-
-    * the :attr:`~.Objective.H` attribute of the objective contains a
-      Hamiltonian $\Op{H}$, and there are Lindblad operators $\Op{L}_i$ in
-      :attr:`~.Objective.c_ops` (master equation in Lindblad form). The
-      abstract H is $i \Liouville$ for the Liouvillian defined as
-
-      .. math::
-
-        \Liouville[\Op{\rho}] =
-        -i[\Op{H},\Op{\rho}]+\sum_{i} \left(
-            \Op{L}_i \Op{\rho} \Op{L}_i^\dagger -
-            \frac{1}{2} \left\{
-                \Op{L}_i^\dagger \Op{L}_i, \Op{\rho}\right\} \right)
-
-    * the :attr:`~.Objective.H` attribute of the objective contains a
-      super-operator $\Liouville$, there are no :attr:`~.Objective.c_ops`
-      (general master equation). The abstract H is again $i \Liouville$.
-    """
+    """An example docstring for a class definition."""
 
     def __init__(self, energy):
         if type(energy) != list:
@@ -111,6 +66,13 @@ class Laser:
     def __init__(
         self, rabifreq, frequency, couple, polarization=None, pulse=None
     ):  # couple is a list of two Levels e.g. [level1, level2]
+        """
+        Blah blah blah.
+        Parameters
+        ---------
+        name
+            A string to assign to the `name` instance attribute.
+        """
         self.rabi = rabifreq  # Omega komplexwertig ist die Rabifrequenz
         self.couple = couple
         self.frequency = frequency  # omega
