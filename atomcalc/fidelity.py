@@ -194,10 +194,11 @@ class System:
                 initial_state_dm
                 + qutip.ket2dm(level_ket[i]) * initial_state_index_list[i]
             )
+        # Paare: [Level, zugehoeriger Basisvektor] e.g. [[level1, level2], [[1,0],[0,1]]]
         level_ket = [
             self.levels,
             level_ket,
-        ]  # Paare: [Level, zugehoeriger Basisvektor] e.g. [[level1, level2], [[1,0],[0,1]]]
+        ]
         # Erzeugung der Leiteroperatoren:
         sigma = [[]] * len(
             self.decay.rates
