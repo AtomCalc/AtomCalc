@@ -8,29 +8,17 @@ import scipy
 import time
 
 
-def plot_population(result, dim, maxdetuning=None):
+def plot_population(result, dim):
     fig, ax = plt.subplots()
     for i in range(dim):
         if i != 12:
             ax.plot(
                 result.times, result.expect[i], linewidth=1, label="{}".format(i + 1)
             )
-            # ax.plot(result.times*2.41888e-17 , result.expect[i],linewidth = 1, label='{}'.format(i+1))
-    #    ax.plot(result.times, result.expect[0]+result.expect[1]+result.expect[2], label='total')
-    # x = np.arange(0,50000,10)
-    # y = np.sin(1.2441522993618834e-05 /2*x)**2     # sin(Omega*x) sollte es ein: "The Rabi frequency is the radian frequency of the Rabi cycle undergone for a given atomic transition in a given light field" <==> sin**2(Omega/2*x)
-    # ax.plot(x,y, linewidth=3)
-    # x2 = np.arange(0,200000,100)
-    # y2 = np.sin(4.9766091974475336e-05/2*x2)**2
-    # ax.plot(x2,y2, linewidth=1)
-    # if maxdetuning != None:
-    #     ax.vlines((maxdetuning), 0,1)
     ax.legend()
     ax.set_ylim([-0.01, 1.01])
     ax.set_xlabel("Time")
-    # ax.set_xlabel('time in s')
     ax.set_ylabel("Population")
-    # plt.savefig('bigplot.png')
     plt.show()
 
 
@@ -39,23 +27,66 @@ def plot_population_diagonalization(tlist, result, dim):
     tlist = np.array(tlist)
     n = dim
     for i in range(dim):
-        ax.plot(tlist / 41341373000, np.real(result[:, i]), linewidth=1.5)
+        ax.plot(tlist, np.real(result[:, i]), linewidth=1.5)
     ax.legend()
     ax.set_ylim([-0.1, 1.1])
-    ax.set_xlabel(r"Time in µs")
+    ax.set_xlabel(r"Time")
     ax.set_ylabel(r"Population")
     plt.show()
 
 
 class Level:
-    """
-    Level characterized by the energy
+    r"""Calculate ∂H/∂ϵ for the standard equations of motion.
+
+    Args:
+        objectives (list): List of :class:`.Objective` instances
+        i_objective (int): The index of the objective in `objectives` whose
+            equation of motion the derivative should be calculated.
+        pulses (list): The list of pulses occuring in `objectives`
+        pulses_mapping (list): The mapping of elements of `pulses` to the
+            components of `objectives`, as returned by
+            :func:`.extract_controls_mapping`
+        i_pulse (int): The index of the pulse in `pulses` for which to
+            calculate the derivative
+        time_index (int): The index of the value in ``pulses[i_pulse]`` that
+            should be plugged in to ∂H/∂ϵ. Not used, as this routine only
+            considers equations of motion that are linear in the controls.
+
+    Returns:
+        callable: The quantum operator or super-operator that
+        represents ∂H/∂ϵ. In general, the return type can be any callable `mu`
+        so that ``mu(state)`` calculates the result of applying ∂H/∂ϵ to
+        `state`. In most cases, a :class:`~qutip.Qobj` will be returned, which
+        is just the most convenient example of an appropriate callable.
+
+    This function covers the following cases:
+
+    * the :attr:`~.Objective.H` attribute of the objective contains a
+      Hamiltonian, there are no :attr:`~.Objective.c_ops` (Schrödinger
+      equation: the abstract H in ∂H/∂ϵ is the Hamiltonian directly)
+
+    * the :attr:`~.Objective.H` attribute of the objective contains a
+      Hamiltonian $\Op{H}$, and there are Lindblad operators $\Op{L}_i$ in
+      :attr:`~.Objective.c_ops` (master equation in Lindblad form). The
+      abstract H is $i \Liouville$ for the Liouvillian defined as
+
+      .. math::
+
+        \Liouville[\Op{\rho}] =
+        -i[\Op{H},\Op{\rho}]+\sum_{i} \left(
+            \Op{L}_i \Op{\rho} \Op{L}_i^\dagger -
+            \frac{1}{2} \left\{
+                \Op{L}_i^\dagger \Op{L}_i, \Op{\rho}\right\} \right)
+
+    * the :attr:`~.Objective.H` attribute of the objective contains a
+      super-operator $\Liouville$, there are no :attr:`~.Objective.c_ops`
+      (general master equation). The abstract H is again $i \Liouville$.
     """
 
     def __init__(self, energy):
         if type(energy) != list:
             raise TypeError(
-                "energy needs to be a list"
+                "Energy needs to be a list"
             )  # ist inzwischen unnötig das als Liste zu machen
         self.energy = energy[0]
 
@@ -271,7 +302,7 @@ class System:
                                         np.around(self.lasers[n].frequency, decimals=4)
                                     )
                                     raise TypeError(
-                                        "Not enough degrees of freedom: Laserfrequenzen sorgen dafuer, dass ein Level mehrere Energien annehmen muss bzw. mindestens zwei verschiedene Detunings besitzt. See my Master Thesis page 7 bottom text: the only prerequisite ..."
+                                        "Not enough degrees of freedom: See my Master Thesis page 7 bottom text: The only prerequisite ..."
                                     )
                             else:
                                 E_virt[i1[n]] = (
@@ -533,33 +564,10 @@ class System:
             result = np.array(result, dtype=np.complex128)
             if plot_pop == True:
                 plot_population(tlist_ges[:], result[:], self.dim)
-            print(
-                "Pop von Level {} beim Ende der Zeit {}ns, ist {}".format(
-                    4, tlist[-1] / 41341373, np.real(result[-1][3])
-                )
-            )
-            print(
-                "Pop von Level {} beim Ende der Zeit {}ns, ist {}".format(
-                    3, tlist[-1] / 41341373, np.real(result[-1][2])
-                )
-            )
-            print(
-                "Pop von Level {} beim Ende der Zeit {}ns, ist {}".format(
-                    2, tlist[-1] / 41341373, np.real(result[-1][1])
-                )
-            )
-            print(
-                "Pop von Level {} beim Ende der Zeit {}ns, ist {}".format(
-                    7, tlist[-1] / 41341373, np.real(result[-1][6])
-                )
-            )
-            print([np.real(np.amax(result[:, read_out_level])), delta_stark_shift])
-            # return [np.real(np.amax(result[:,read_out_level])), delta_stark_shift]
-            return [np.real((result[-1, read_out_level])), delta_stark_shift]
+            return [np.real(np.amax(result[:, read_out_level])), delta_stark_shift]
+            # return [np.real((result[-1, read_out_level])), delta_stark_shift]
 
-        elif (
-            Diagonalization == True
-        ):  # Quelle http://web.mit.edu/jianshucaogroup/pdfdir/JCP117-3822-2002.pdf und https://aip.scitation.org/doi/pdf/10.1063/1.5115323 https://arxiv.org/pdf/2006.01837.pdf für die Bedingungen in equation (64)
+        elif Diagonalization == True:
             L = qutip.liouvillian(H, c_ops)
             L = np.reshape(L, (self.dim**2, self.dim**2))
             # # Vollständige Zeitentwicklung:
@@ -607,40 +615,9 @@ class System:
             result = np.array(result)
             if plot_pop == True:
                 plot_population_diagonalization(tlist, result, self.dim)
-            maximum_index = np.argmax(
-                result[:, 0]
-            )  # gibt Zeitpunkt, bei dem das Maximum von Level 1 erreicht wird.
-            print(
-                "Pop von Level {} beim Maximum von Level 1, Zeit {}ns, ist {}".format(
-                    4,
-                    tlist[maximum_index] / 41341373,
-                    np.real(result[maximum_index][3]),
-                )
-            )  # Pop von Level 4, um zu schauen wie weit der Decay dort fortgeschritten ist
-            print(
-                "Pop von Level {} beim Maximum von Level 1, Zeit {}ns, ist {}".format(
-                    3,
-                    tlist[maximum_index] / 41341373,
-                    np.real(result[maximum_index][2]),
-                )
-            )
-            print(
-                "Pop von Level {} beim Maximum von Level 1, Zeit {}ns, ist {}".format(
-                    2,
-                    tlist[maximum_index] / 41341373,
-                    np.real(result[maximum_index][1]),
-                )
-            )
-            print(
-                "Pop von Level {} beim Maximum von Level 1, Zeit {}ns, ist {}".format(
-                    7,
-                    tlist[maximum_index] / 41341373,
-                    np.real(result[maximum_index][6]),
-                )
-            )
             return [np.real(np.amax(result[:, read_out_level])), delta_stark_shift]
 
-        else:  # Integrations-solver von QuTip
+        else:  # Integration-solver from QuTip
             tlist = list(range(0, maxtime, int(41300000 / 100)))
             print("Länge von tlist: {}".format(len(tlist)))
             # opts=Options(nsteps=1000)
