@@ -5,6 +5,8 @@
 
 Welcome to AtomCalc's documentation!
 ====================================
+.. automodule:: atomcalc.fidelity
+   :members:
 
 .. toctree::
    :maxdepth: 2
