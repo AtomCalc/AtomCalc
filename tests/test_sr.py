@@ -1,4 +1,5 @@
 #%% Test
+import AtomCalc
 import arc
 from arc import *
 
