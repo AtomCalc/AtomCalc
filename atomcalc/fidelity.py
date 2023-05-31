@@ -1,11 +1,11 @@
 # %%
 # Imports
-# import numpy as np
-# import qutip
-# import matplotlib
-# import matplotlib.pylab as plt
-# import scipy
-# import time
+import numpy as np
+import qutip
+import matplotlib
+import matplotlib.pylab as plt
+import scipy
+import time
 
 
 def plot_population(result, dim):
@@ -27,7 +27,7 @@ def plot_population_diagonalization(tlist, result, dim):
     tlist = np.array(tlist)
     n = dim
     for i in range(dim):
-        ax.plot(tlist, np.real(result[:, i]), linewidth=1.5)
+        ax.plot(tlist, np.real(result[:, i]), linewidth=1.5, label="{}".format(i + 1))
     ax.legend()
     ax.set_ylim([-0.1, 1.1])
     ax.set_xlabel(r"Time")
@@ -48,7 +48,7 @@ class Level:
 
     Example:
 
-        Level([5])
+        >>> Level([5])
         This is a Level object with an energy of 5.
     """
 
@@ -69,18 +69,18 @@ class Decay:
 
 
     Attributes:
-        rates (list): A list of numbers that are the decay rates.
-        final_states (list): A list of tupels of :class:`Level` objects that assign the decay rates to a corresponding transition.
+        rates (list): a list of decay rates.
+        final_states (list): a list of tupels of :class:`Level` objects that assign the decay rates to a corresponding transition.
 
     Example:
 
-        Decay([0, 1], [[Level([20]), Level([0])], [Level([5]), Level([0])]])
+        >>> Decay([0, 1], [[Level([20]), Level([0])], [Level([5]), Level([0])]])
         The transition between Level([20]) and Level([0]) is assigned a decay rate of 0. The transition between Level([5]) and Level([0]) is assigned a decay rate of 1.
     """
 
     def __init__(
         self, rates, final_states
-    ):  # final_states is a Level-list with two-level-couples in each entry. rates is the respective gamma-list to each couple
+    ):  # final_states is a Level-list with two-level-couples in each entry. rates is the respective decay-rate-list to each couple
         if type(rates) != list or type(final_states) != list:
             raise TypeError("rates and final_states need to be a list")
         self.rates = np.array(rates)
@@ -95,16 +95,18 @@ class Laser:
         rabifreq (number): value for :attr:`rabifreq`
         frequency (number): value for :attr:`frequency`
         couple (list): value for :attr:`couple`
+        pulse (None or function or list): value for :attr:`pulse`
 
 
     Attributes:
-        rabifreq (number): A number that is the Rabi frequency of the laser.
-        frequency (number): A number that is the frequency of the laser.
-        couple (list): A tupel of :class:`Level` objects that assigns the laser to this transition.
+        rabifreq (number): Rabi frequency of the laser.
+        frequency (number): frequency of the laser.
+        couple (list): a tupel of :class:`Level` objects that assigns the laser to this transition.
+        pulse (None or function or list): a time dependent function of the Rabi frequency of the laser OR a list of numbers describing a Rabi frequency pulse.
 
     Example:
 
-        Laser(1, 100, [Level([0]),Level([20])])
+        >>> Laser(1, 100, [Level([0]),Level([20])])
         The transition between Level([20]) and Level([0]) is assigned a laser with Rabi frequency of 1 and a frequency of 100.
     """
 
@@ -133,13 +135,16 @@ class System:
         decay (class object): A :class:`Decay` object.
 
     Example:
-        level1 = Level([0])
-        level2 = Level([20])
-        level3 = Level([100])
-        laser1 = Laser(1, 120, [level1,level3])
-        laser2 = Laser(1, 100, [level2,level3])
-        decay = Decay([0],[[level3,level1]])
-        system = System([level1, level2, level3], [laser1,laser2], decay)
+        >>> level1 = Level([0])
+        >>> level2 = Level([20])
+        >>> level3 = Level([100])
+        >>> laser1 = Laser(1, 120, [level1,level3])
+        >>> laser2 = Laser(1, 100, [level2,level3])
+        >>> decay = Decay([0],[[level3,level1]])
+        >>> system = System([level1, level2, level3], [laser1,laser2], decay)
+
+    Note:
+        Sort levels by energy in ascending order and Laser couples from low to high.
     """
 
     def __init__(
@@ -151,19 +156,14 @@ class System:
         self.decay = decay
 
     def draw(self):
-        # x_window = np.linspace(0,1,20)     # self.levels -> System.levels -> levels (das ist eine Liste von Level-Objekten)
         # Levels
-        for i in range(
-            len(self.levels)
-        ):  # draw hat keinen Parameter levels, aber das System-Objekt hat die Methode .levels aus __init__
+        for i in range(len(self.levels)):
             x = [0.01 + 0.2 * i, 0.19 + 0.2 * i]
             y = [self.levels[i].energy, self.levels[i].energy]
-            plt.plot(
-                x, y, linestyle="-", linewidth=1, label="Level {}".format(i + 1)
-            )  # jedes Level-Objekt hat die Methode .energy
+            plt.plot(x, y, linestyle="-", linewidth=1, label="Level {}".format(i + 1))
             plt.text(0.5 * (x[0] + x[1]), y[0] + 0.002, "{}".format(i + 1))
-        plt.xlim([-0.25, 1.5])
-        # Detuning. Lasers tuned to a frequency below the resonant frequency are called 'red-detuned' andere Seite ist 'blue-detuned'.
+        plt.xlim([-0.25, 0.2 * len(self.levels) + 0.25])
+        # Detuning
         detuning = [[]] * len(self.lasers)
         for i in range(len(self.lasers)):
             max_couple = max(
@@ -172,17 +172,7 @@ class System:
             min_couple = min(
                 self.lasers[i].couple[0].energy, self.lasers[i].couple[1].energy
             )
-            detuning[i] = (
-                min_couple + self.lasers[i].frequency - max_couple
-            )  # freq zu klein -> negatives detuning. hbar=1
-            if (
-                abs(detuning[i]) > 2
-            ):  # self.lasers[i].couple[0].energy + self.lasers[i].frequency - self.lasers[i].couple[1].energy < self.lasers[i].couple[0].energy - self.lasers[i].frequency - self.lasers[i].couple[1].energy
-                detuning[i] = -(
-                    self.lasers[i].couple[0].energy
-                    - self.lasers[i].frequency
-                    - self.lasers[i].couple[1].energy
-                )
+            detuning[i] = min_couple + self.lasers[i].frequency - max_couple
         for i in range(len(self.lasers)):
             max_couple = max(
                 self.lasers[i].couple[0].energy, self.lasers[i].couple[1].energy
@@ -197,7 +187,7 @@ class System:
                 x,
                 y,
                 linestyle="--",
-                label="D {} = {:.2e}".format(i + 1, detuning[i] / Hz_to_au),
+                label="D {} = {:.2e}".format(i + 1, detuning[i]),
             )
         # Lasers
         for i in range(len(self.lasers)):
@@ -210,10 +200,8 @@ class System:
             i1 = self.levels.index(self.lasers[i].couple[0])
             i2 = self.levels.index(self.lasers[i].couple[1])
             x = [0.1 + 0.2 * i1, 0.1 + 0.2 * i2]
-            # x = [0.1+i/len(self.lasers),0.1+i/len(self.lasers)]
             y = [min_couple, max_couple + detuning[i]]
             plt.plot(x, y, linestyle="-", label="Laser {}".format(i + 1))
-            # plt.text(x[0]+0.01, 0.5*(y[0]+y[1]), '{}'.format(i+1))
         plt.legend(loc="center left", bbox_to_anchor=(1, 0.5))
         plt.show()
 
@@ -222,40 +210,61 @@ class System:
         initial_state_index_list,
         read_out_level,
         maxtime,
-        delta_stark_shift,
+        delta_stark_shift=0,
         Diagonalization=True,
         plot_pop=True,
-    ):  # Level nach Energie aufsteigend sortieren. Laserkoppelpaare von niedrig nach groß.
+        Trotterintervals=500,
+        resolution=250,
+    ):
         """
-        hi
+        An object that describes values for a laser: Rabi frequency, frequency, and coupled states.
+
+        Args:
+            initial_state_index_list (list): value for :attr:`initial_state_index_list`
+            read_out_level (number): value for :attr:`read_out_level`
+            maxtime (integer): value for :attr:`maxtime`
+            delta_stark_shift (number): value for :attr:`delta_stark_shift`
+            Diagonalization (bool): value for :attr:`Diagonalization`
+            plot_pop (bool): value for :attr:`plot_pop`
+            Trotterintervals (number) : value for :attr:`Trotterintervals`
+            resolution (number): value for :attr:`resolution`
+
+        Attributes:
+            initial_state_index_list (list): Initial population distribution. First entry denotes the population of the first level and so on. Length of the list needs to be equal to the level-count and the entries need to sum up to one.
+            read_out_level (number): determines which levels population maximum is printed in the output. 0 is the first level.
+            maxtime (integer): maximum time the system is simulated.
+            delta_stark_shift (number): detuning of the first level.
+            Diagonalization (bool): if False, simulate the system with the integration method 'qutip.mesolve' from QuTiP. If True, simulate the system using diagonalization.
+            plot_pop (bool): if False, do not show the population plot.
+            Trotterintervals (number): only relevant if a pulse is given. Discretisizes the pulse into a step function of `Trotterintervals` time intervals.
+            resolution (number): only relevant if Diagonalization = True. Divides the simulation time interval into `resolution` uniformly distributed points of time.
+
         """
         Trotter = False
         # make basis: levels to kets
         initial_state_dm = qutip.qzero(self.dim)
-        # initial_state = basis(self.dim, initial_state_index)
-        level_ket = [[]] * self.dim  # empty ket with dim empty entries
+        level_ket = [[]] * self.dim  # empty ket with 'dim' empty entries
         proj = [[]] * self.dim
         for i in range(len(self.levels)):
             level_ket[i] = qutip.basis(self.dim, i)
             proj[i] = qutip.ket2dm(level_ket[i])
-            # print(proj[i])
             initial_state_dm = (
                 initial_state_dm
                 + qutip.ket2dm(level_ket[i]) * initial_state_index_list[i]
             )
-        # Paare: [Level, zugehoeriger Basisvektor] e.g. [[level1, level2], [[1,0],[0,1]]]
+        # level_ket: [Level, corresponding basis vector], e.g. [[level1, level2], [[1,0],[0,1]]]
         level_ket = [
             self.levels,
             level_ket,
         ]
-        # Erzeugung der Leiteroperatoren:
+        # generation of the ladder operators:
         sigma = [[]] * len(
             self.decay.rates
-        )  # fuer jedes Gamma gibt es einen Leiteroperator
+        )  # for each decay rate there is one ladder operator
         start_state = [[]] * len(
             self.decay.rates
-        )  # fuer jedes Gamma gibt es einen Start-
-        final_state = [[]] * len(self.decay.rates)  # und einen Zielzustand
+        )  # for each gamma there is a starting state and a target state
+        final_state = [[]] * len(self.decay.rates)
         for i in range(len(self.decay.rates)):
             if (
                 self.decay.final_states[i][0].energy
@@ -270,40 +279,30 @@ class System:
             i2 = level_ket[0].index(final_state)
             sigma[i] = (
                 level_ket[1][i2] * level_ket[1][i1].dag()
-            )  # sigma[i] gibt Leiteroperator fuer das erste Gamma in der Liste vom decay-Objekt
+            )  # sigma[i] is the ladder operator for the first decay rate in the list of the decay object
         rabifreqs = [[]] * len(self.lasers)
-        freqs = [[]] * len(self.lasers)
-        ############## U Calculations
-        U = np.zeros((self.dim, self.dim), dtype=np.complex128)
-        U_exp = [[]] * self.dim
 
-        # DIAGONALEINTRAEGE:
-        # detuning = [[]] * len(self.levels)
+        # Construction of the Hamiltonian H ---------
+        # DIAGONAL ENTRIES:
         E_virt = [[]] * len(self.levels)
         Bool_Detuning = [[]] * len(self.levels)
-        # Vergeben = [[]] * len(self.levels)
         i1 = [[]] * len(self.lasers)
         i2 = [[]] * len(self.lasers)
         for i in range(len(self.levels)):
-            # print(i)
             if i == 0:
-                E_virt[i] = (
-                    0 + delta_stark_shift
-                )  # Man koennte evtl noch einen Freiheitsgrad rausschlagen, wenn man hier auch ein Detuning zulassen wuerde. Aber andererseits ist das dann aequivalent zu einem Energieshift aller anderen Level, die in diesem Algorithmus dann auch auftauchen sollten, also ist es vermutlich doch nicht moeglich.
+                E_virt[i] = 0 + delta_stark_shift
             else:
                 for n in range(len(self.lasers)):
                     i1[n] = level_ket[0].index(
                         self.lasers[n].couple[0]
-                    )  # gibt Level-Index vom Level in couple[0] (Index von level1 bei couple [level1, level3])
+                    )  # level index of the level in couple[0]. (e.g. index of level1 in couple [level1, level3])
                     i2[n] = level_ket[0].index(
                         self.lasers[n].couple[1]
-                    )  # gibt Level-Index vom Level in couple[1] (Index von level3 bei couple [level1, level3])
-                # print(i1)
+                    )  # level index of the level in couple[1]. (e.g. index of level3 in couple [level1, level3])
                 for n in range(len(self.lasers)):
-                    # print(n)
                     if (
                         self.lasers[n].couple[1] == self.levels[i]
-                    ):  # Wenn der Zieleintrag im Lasercouple gleich dem Level mit E_virt[i] ist. ########
+                    ):  # If the target entry in the lasercouple is equal to the level with E_virt[i].
                         if Bool_Detuning[i] == True:
                             if Bool_Detuning[i1[n]] == True:
                                 if np.around(
@@ -323,326 +322,344 @@ class System:
                                         "Not enough degrees of freedom: See my Master Thesis page 7 bottom text: The only prerequisite ..."
                                     )
                             else:
-                                E_virt[i1[n]] = (
-                                    E_virt[i2[n]] - self.lasers[n].frequency
-                                )  ##########
+                                E_virt[i1[n]] = E_virt[i2[n]] - self.lasers[n].frequency
                                 Bool_Detuning[i1[n]] == True
                         else:
-                            E_virt[i] = (
-                                E_virt[i1[n]] + self.lasers[n].frequency
-                            )  # E2v = E1v + omega_12
-                            # Vergeben[i] == True
+                            E_virt[i] = E_virt[i1[n]] + self.lasers[n].frequency
                             Bool_Detuning[
                                 i
-                            ] = True  # Dieses Level vertraegt kein weiteres Detuning und weitere Detunings muessen an andere Level "weitergegeben" werden
-                    else:  #############
+                            ] = True  # This level does not support further detuning and further detunings must be "passed on" to other levels.
+                    else:
                         if Bool_Detuning[i] == True:
                             pass
                         else:
                             E_virt[i] = self.levels[
                                 i
-                            ].energy  # Kein Detuning. Kann sich aber noch in folgenden Schritten aendern, wenn man auf dieses Level ein Detuning "weitergeben" muss. siehe Beispiel in "Neuer ALGO Seite 4".
+                            ].energy  # No detuning. This can change in the following steps, if you have to "pass on" a detuning to this level.
 
         H = np.zeros((self.dim, self.dim), dtype=np.complex128)
         for i in range(self.dim):
             for j in range(self.dim):
                 if i == j:
                     H[i, j] = E_virt[i] - self.levels[i].energy  # = detuning
-        # NICHT-DIAGONAL EINTRAEGE:
+        # NON-DIAGONAL ENTRIES:
         H_couple1 = [[]] * len(self.lasers)
         H_couple2 = [[]] * len(self.lasers)
         for i in range(len(self.lasers)):
             rabifreqs[i] = self.lasers[i].rabi
             i1 = level_ket[0].index(
                 self.lasers[i].couple[0]
-            )  # gibt Level-Index vom Level in couple[0] (Index von level1 bei couple [level1, level3])
+            )  # level index of the level in couple[0]. (e.g. index of level1 in couple [level1, level3])
             i2 = level_ket[0].index(
                 self.lasers[i].couple[1]
-            )  # gibt Level-Index vom Level in couple[1] (Index von level3 bei couple [level1, level3])
+            )  # level index of the level in couple[1]. (e.g. index of level3 in couple [level1, level3])
             basis1 = level_ket[1][
                 i1
-            ]  # gibt zugehoerigen Basisvektor zu i1, also zu couple[0]
-            basis2 = level_ket[1][i2]  # gibt zugehoerigen Basisvektor zu i2
+            ]  # gives the corresponding basis vector to i1, i.e. to couple[0].
+            basis2 = level_ket[1][i2]  # gives the corresponding basis vector to i2
             H_couple1[i] = (
                 basis1 * basis2.dag()
-            )  # gibt den Platz fuer den ersten Eintrag des Kopplungs-Omegas des i-ten Lasers
+            )  # gives the right place in the H matrix for the first entry of the coupling Rabi frequency of the i-th laser
             H_couple2[i] = (
                 basis2 * basis1.dag()
-            )  # gibt den Platz fuer den zweiten Eintrag. H_couple1[i] und H_couple2[i] bilden ein Paar fuer i-ten Laser
+            )  # gives the right place in the H matrix for the second entry. H_couple1[i] and H_couple2[i] form a pair for the i-th laser
 
-        # zeitabhängige Pulse rein
+        # Time-dependent pulses
         lasermitpuls_index = []
         for n in range(
             len(self.lasers)
-        ):  # Hier wird entschieden, ob Trotter gemacht werden soll (d.h. es wird geschaut, ob ein Puls gegeben ist oder nicht)
+        ):  # Here it is decided whether Trotter should be performed (i.e. it is checked whether a pulse is given or not)
             if hasattr(
                 self.lasers[n].pulse, "__len__"
-            ):  # Falls der Puls als Liste gegeben ist
-                if (
-                    self.lasers[n].pulse.any() != None
-                ):  # Falls laser[n] einen Puls gegeben hat
+            ):  # If the pulse is given as a list
+                if self.lasers[n].pulse.any() != None:  # If laser[n] has a pulse
                     lasermitpuls_index = np.append(
                         lasermitpuls_index, n
-                    )  # Alle Laserindizes von den Lasern, die einen Puls haben, sind hier drin
+                    )  # All laser indices from the lasers that have a pulse are in here
                     lasermitpuls_index = lasermitpuls_index.astype(int)
                     Trotter = True
-                    # print(lasermitpuls_index)
                 else:
                     H = H + (1 / 2 * rabifreqs[n]) * (H_couple1[n] + H_couple2[n])
-            else:  # Falls der Puls als Funktion gegeben ist
-                if (
-                    self.lasers[n].pulse != None
-                ):  # Falls laser[n] einen Puls gegeben hat
+            else:  # If the pulse is given as a function
+                if self.lasers[n].pulse != None:  # If laser[n] has a pulse
                     lasermitpuls_index = np.append(
                         lasermitpuls_index, n
-                    )  # Alle Laserindizes von den Lasern, die einen Puls haben, sind hier drin
+                    )  # All laser indices from the lasers that have a pulse are in here
                     lasermitpuls_index = lasermitpuls_index.astype(int)
                     Trotter = True
-                    # print(lasermitpuls_index)
                 else:
                     H = H + (1 / 2 * rabifreqs[n]) * (H_couple1[n] + H_couple2[n])
+        print(
+            "Transformed Hamiltonian: {}".format(H)
+        )  # Only the Rabi frequency entries are missing if the pulse is time dependent.
 
-        # Hier an dieser Stelle fehlen nur noch die Rabifrequenzen der Pulse.
-
-        # print('Alles ist transformiert: {}' .format(H))
-        # Loesen
+        # The Hamiltonian is created, now we solve it.
+        # collapse operators are defined
         c_ops = [[]] * len(self.decay.rates)
         for i in range(len(self.decay.rates)):
             c_ops[i] = qutip.Qobj(np.sqrt(self.decay.rates[i]) * sigma[i])
         # !Entweder Diagonalisieren oder mesolve verwenden!
         if (
             Trotter == True
-        ):  # Trotterintervalle: Intervalle, in denen H konstant angenommen wird. Zeitintervalle: Intervalle für die ein Wert ausgerechnet wird (Wichtig für die Balance zwischen Auflösung und Rechenzeit, bestimmt wie viele Werte insgesamt berechnet werden).
-            Anzahl_n = (
-                500 + 1
-            )  # Anzahl_n-1 = Anzahl Trotterintervalle. Bestimmt die Größe der Trotterintervalle, auf denen der Hamiltonian/Liouvillian konstant angenommen wird. Anzahl_n = len(zeitdiskretisierung). Je größer, desto mehr Trotterintervalle.
-            if maxtime / (Anzahl_n - 1) != int(maxtime / (Anzahl_n - 1)):
+        ):  # Trotter intervals: Intervals in which H is assumed to be constant. Time intervals: Intervals for which a value is calculated (important for the balance between resolution and calculation time, determines how many values are calculated in total).
+            number_TI = Trotterintervals  # number of trotterintervals
+            if maxtime / number_TI != int(maxtime / number_TI):
                 raise Exception(
                     "The number of trotterintervals of {} doesnt divide the given timerange of {} into trotterintervals with integer time".format(
-                        Anzahl_n - 1, maxtime
+                        number_TI, maxtime
                     )
                 )
-            zeitdiskretisierung = np.linspace(
-                0, maxtime, Anzahl_n
-            )  # macht "Anzahl_n" Einträge von 0 bis maxtime. !!!!!!!!!!NUR GANZZAHLIGE WERTE IN DIESER LISTE ERLAUBT!!!!!!!!!!, sonst könnte das Runden unten bei tlist zu Problemen mit den Dimensionen führen
-            print("Ein Trotterintervall ist {} groß.".format(zeitdiskretisierung[1]))
-            anzahl_zeitintervalle_pro_trotterintervall = 2  # muss größer als 1 sein und ein Trotterintervall in integer Zeitintervalle teilen.
-            if zeitdiskretisierung[
-                1
-            ] / anzahl_zeitintervalle_pro_trotterintervall != int(
-                zeitdiskretisierung[1] / anzahl_zeitintervalle_pro_trotterintervall
-            ):
+            td = np.linspace(0, maxtime, number_TI + 1)
+            print("One trotterinterval has size {}.".format(td[1]))
+            points_per_TI = 2  # divides one trotterinterval in points_per_TI intervals
+            if td[1] / points_per_TI != int(td[1] / points_per_TI):
                 raise Exception(
                     "The number of timeintervals per trotterinterval of {} doesnt divide one trotterinterval of size {} into timeintervals with integer time".format(
-                        anzahl_zeitintervalle_pro_trotterintervall,
-                        zeitdiskretisierung[1],
+                        points_per_TI, td[1]
                     )
                 )
-            print(zeitdiskretisierung[1] / anzahl_zeitintervalle_pro_trotterintervall)
-            trotter_step = int(
-                zeitdiskretisierung[1] / anzahl_zeitintervalle_pro_trotterintervall
-            )  # 41341373*20 # Muss ganzzahlig sein. # hat nichts mit Genauigkeit zu tun, sondern nur mit der "Auflösung" des Bildes bzw. Anzahl ausgerechneter Werte. Ein Trotter_step gibt an wie groß das Intervall zwischen ausgerechneten Werten ist: Je größer, desto weniger Werte werden ausgerechnet.
-            # Der Code ist schlecht, deshalb muss trotter_step erstens kleiner sein als ein Trotterintervall und zweitens so gewählt werden, dass die Trotterintervalle ganzzahlig zerlegt werden. D.h. trotter_step muss zeitdiskretisierung[1] ganzzahlig teilen.
-            # Für t=0 bei der Diagonalisierung:
+            print("One trotter step has size {}.".format(td[1] / points_per_TI))
+            trotter_step = int(td[1] / points_per_TI)
+
+            # Time evolution
             tlist_ges = [[]] * (
-                (len(zeitdiskretisierung) - 1)
-                * int((maxtime / (Anzahl_n - 1)) / trotter_step)
-                + 1
-            )  # len(zeitdiskretisierung-1) ist die Anzahl der Trotter-Intervalle.  maxtime/(Anzahl_n-1) ist die Größe eines Trotterintervalls in Zeiteinheiten.   (maxtime/(Anzahl_n-1))/trotter_step ist die Anzahl an Zeitpunkten, die berechnet werden soll innerhalb eines Trotterintervalls (also innerhalb einem n)
-            print(
-                (len(zeitdiskretisierung) - 1)
-                * int((maxtime / (Anzahl_n - 1)) / trotter_step)
-            )
-            dm_t = [[]] * len(
+                (len(td) - 1) * int((maxtime / (number_TI)) / trotter_step) + 1
+            )  # will contain every point of time
+            dm_t = [[]] * len(tlist_ges)  # will contain density matrices for each time
+            result = [[]] * len(
                 tlist_ges
-            )  # Eine Liste, die für jeden Zeitpunkt die zugehörige Dichtematrix enthalten wird
-            result = [[]] * len(tlist_ges)
-            zwischenresult0 = np.zeros(self.dim, dtype=np.complex128)  # [[]] * self.dim
+            )  # will contain one list of expectation values for each level for each time
+
+            # For t = 0, initial population:
+            expect_value_0 = np.zeros(self.dim)
             tlist_ges[0] = 0
             dm_t[0] = np.reshape(initial_state_dm, (self.dim**2, 1))
-            # dm_t[0] = np.reshape(proj[initial_state_index], (self.dim**2,1))
-            for m in range(
-                self.dim
-            ):  # für t=0 werden die expectation values zu jedem Level ausgerechnet
-                zwischenresult0[m] = qutip.expect(
+            for m in range(self.dim):
+                expect_value_0[m] = qutip.expect(
                     qutip.Qobj(proj[m]),
                     qutip.Qobj(np.reshape(dm_t[0], (self.dim, self.dim))),
                 )
-            result[0] = np.array(zwischenresult0, dtype=np.complex128)
-            # print(self.lasers[0].pulse(1))
-            print(len(zeitdiskretisierung))
+            result[0] = np.array(expect_value_0)
 
-            H_list = [H] * len(zeitdiskretisierung)
-            L = [[]] * len(zeitdiskretisierung)
-            # pulse = np.array([pulse(t) for t in zeitdiskretisierung]) # Gibt den Wert der Rabifrequenz pro Zeitintervall im Verlauf des Pulses als Liste
-            for n in range(len(zeitdiskretisierung) - 1):  # n loopt über die Intervalle
+            H_list = [H] * len(td)
+            L = [[]] * len(td)
+            # For t > 0:
+            for n in range(len(td) - 1):  # loop over all trotter intervals
                 if n % 100 == 0:
                     print(n)
+                # add the Rabi frequency entries for the Trotter interval we want to simulate here
                 for i in range(len(lasermitpuls_index)):
                     if hasattr(
                         self.lasers[0].pulse, "__len__"
-                    ):  # Falls der Puls als Liste gegeben ist
+                    ):  # If the pulse is given as a list
                         H_list[n] = H_list[n] + (
                             1 / 2 * self.lasers[lasermitpuls_index[i]].pulse[n]
                         ) * (
                             H_couple1[lasermitpuls_index[i]]
                             + H_couple2[lasermitpuls_index[i]]
                         )
-                    else:  # Falls der Puls als Funktion gegeben ist
+                    else:  # If the pulse is given as a function
                         H_list[n] = H_list[n] + (
-                            1
-                            / 2
-                            * self.lasers[lasermitpuls_index[i]].pulse(
-                                zeitdiskretisierung[n]
-                            )
+                            1 / 2 * self.lasers[lasermitpuls_index[i]].pulse(td[n])
                         ) * (
                             H_couple1[lasermitpuls_index[i]]
                             + H_couple2[lasermitpuls_index[i]]
                         )
                 L[n] = qutip.liouvillian(H_list[n], c_ops)
                 L[n] = np.reshape(L[n], (self.dim**2, self.dim**2))
-                # Vollständige Zeitentwicklung:
+                # Time evolution within one trotter interval:
                 tlist = list(
                     range(
-                        int(zeitdiskretisierung[n]),
-                        int(zeitdiskretisierung[n + 1] + 1),
+                        int(td[n]),
+                        int(td[n + 1] + 1),
                         trotter_step,
                     )
-                )  # Für den Zeitraum, in dem ein L[n] gilt.  int(zeitdiskretisierung[n+1]) = int(zeitdiskretisierung[n]) + maxtime/(Anzahl_Steps-1)
-                t_index = range(
-                    0, len(tlist)
-                )  # ist identisch zu tlist für n = 0, wenn trotter_step = 1
+                )
+                t_index = range(0, len(tlist))
+                # For the first trotter interval:
                 if (
                     n == 0
                 ):  # +n*len(tlist) braucht man immer, wenn es eine "globale" Variable ist und keine, die sich in jedem Zykel selbst überschreiben soll.   # tlist[1] = t_index[1]+n*len(tlist)
-                    for t in range(
-                        t_index[1], t_index[-1] + 1
-                    ):  # Loopt über die Anzahl an Zeitpunkten innerhalb einer konstanter-Puls-Phase. Jeder Zeitpunkt wird mit t geINDEXT
+                    for t in range(t_index[1], t_index[-1] + 1):
                         tlist_ges[t] = tlist[t]
-                        zwischenresult = [
+                        expect_value = [
                             []
-                        ] * self.dim  # expectation values für ein t zu jedem Level
+                        ] * self.dim  # will contain expectation values of all levels for one t
                         dm_t[t] = scipy.linalg.expm(L[n] * tlist[t]) @ np.reshape(
                             dm_t[0], (self.dim**2, 1)
                         )
-                        for m in range(
-                            self.dim
-                        ):  # für jedes t werden die expectation values zu jedem Level ausgerechnet
-                            # if m == 1:
-                            #     print(Qobj(np.reshape(dm_t[t], (self.dim,self.dim))))
-                            zwischenresult[m] = qutip.expect(
+                        for m in range(self.dim):
+                            expect_value[m] = qutip.expect(
                                 qutip.Qobj(proj[m]),
                                 qutip.Qobj(np.reshape(dm_t[t], (self.dim, self.dim))),
                             )
-                        result[t] = np.array(
-                            zwischenresult, dtype=np.complex128
-                        )  # für jedes t werden die 7 (je nach levelanzahl) expectation values hier eingesetzt. D.h. result[t] gibt eine Liste mit den Expectation values aller Level
+                        result[t] = np.array(expect_value)
+                # For all other trotter intervals:
                 else:
-                    for t in range(
-                        t_index[1], t_index[-1] + 1
-                    ):  # Loopt über die Anzahl an Zeitpunkten. Jeder Zeitpunkt wird mit t geindext
-                        tlist_ges[
-                            t + n * anzahl_zeitintervalle_pro_trotterintervall
-                        ] = tlist[
-                            t
-                        ]  # weil tlist schon von n abhängt braucht man da nur t als Index.
-                        zwischenresult = [
+                    for t in range(t_index[1], t_index[-1] + 1):
+                        tlist_ges[t + n * points_per_TI] = tlist[t]
+                        expect_value = [
                             []
-                        ] * self.dim  # expectation values für ein t zu jedem Level
-                        dm_t[
-                            t + n * anzahl_zeitintervalle_pro_trotterintervall
-                        ] = scipy.linalg.expm(
+                        ] * self.dim  # will contain expectation values of all levels for one t
+                        dm_t[t + n * points_per_TI] = scipy.linalg.expm(
                             L[n] * (tlist[t] - tlist[0])
-                        ) @ np.reshape(
-                            dm_t[n * anzahl_zeitintervalle_pro_trotterintervall],
-                            (self.dim**2, 1),
-                        )
-                        for m in range(
-                            self.dim
-                        ):  # für jedes t werden die expectation values zu jedem Level ausgerechnet
-                            zwischenresult[m] = qutip.expect(
+                        ) @ np.reshape(dm_t[n * points_per_TI], (self.dim**2, 1))
+                        for m in range(self.dim):
+                            expect_value[m] = qutip.expect(
                                 qutip.Qobj(proj[m]),
                                 qutip.Qobj(
                                     np.reshape(
-                                        dm_t[
-                                            t
-                                            + n
-                                            * anzahl_zeitintervalle_pro_trotterintervall
-                                        ],
+                                        dm_t[t + n * points_per_TI],
                                         (self.dim, self.dim),
                                     )
                                 ),
                             )
-                        result[
-                            t + n * anzahl_zeitintervalle_pro_trotterintervall
-                        ] = np.array(
-                            zwischenresult, dtype=np.complex128
-                        )  # für jedes t werden die 7 (je nach levelanzahl) expectation values hier eingesetzt.
-                        # D.h. result[t] gibt eine Liste mit den Expectation values aller Level
-            result = np.array(result, dtype=np.complex128)
+                        result[t + n * points_per_TI] = np.array(expect_value)
+            result = np.array(
+                result
+            )  # result[t] is a list of expectation values of all levels for the point of time that is indexed with t
             if plot_pop == True:
-                plot_population(tlist_ges[:], result[:], self.dim)
-            return [np.real(np.amax(result[:, read_out_level])), delta_stark_shift]
-            # return [np.real((result[-1, read_out_level])), delta_stark_shift]
+                plot_population_diagonalization(tlist_ges[:], result[:], self.dim)
+            return np.real(np.amax(result[:, read_out_level]))
 
         elif Diagonalization == True:
+            # Liouvillian
             L = qutip.liouvillian(H, c_ops)
             L = np.reshape(L, (self.dim**2, self.dim**2))
-            # # Vollständige Zeitentwicklung:
-            # tlist = list(range(0,maxtime, int(maxtime/250))) # Hier wird bestimmt wie viele Werte ausgerechnet werden
-            tlist = np.linspace(0, maxtime, 250)
-            dm_t = [[]] * len(
-                tlist
-            )  # Eine Liste, die für jeden Zeitpunkt die zugehörige Dichtematrix enthalten wird
-            result = [[]] * len(tlist)
-            # Für t=0:
-            zwischenresult0 = [[]] * self.dim
-            dm_t[0] = np.reshape(initial_state_dm, (self.dim**2, 1))
-            # dm_t[0] = np.reshape(proj[initial_state_index], (self.dim**2,1))
-            # print(proj[initial_state_index])
 
-            for m in range(
-                self.dim
-            ):  # für t=0 werden die expectation values zu jedem Level ausgerechnet
-                zwischenresult0[m] = qutip.expect(
+            # Time evolution:
+            tlist = np.linspace(
+                0, maxtime, resolution
+            )  # the time interval is divided into 250 points of time
+            dm_t = [[]] * len(tlist)  # will contain density matrices for each time
+            result = [[]] * len(
+                tlist
+            )  # will contain one list of expectation values for each level for each time
+
+            # For t = 0:
+            expect_value_0 = [
+                []
+            ] * self.dim  # will contain expectation values for every level for t = 0
+            dm_t[0] = np.reshape(initial_state_dm, (self.dim**2, 1))
+            for m in range(self.dim):
+                expect_value_0[m] = qutip.expect(
                     qutip.Qobj(proj[m]),
                     qutip.Qobj(np.reshape(dm_t[0], (self.dim, self.dim))),
                 )
-            result[0] = np.array(zwischenresult0)
-            # Für t>0:
-            for t in range(
-                1, len(tlist)
-            ):  # Loopt über die Anzahl an Zeitpunkten.     Jeder Zeitpunkt wird mit t geindext
-                zwischenresult = [
+            result[0] = np.array(expect_value_0)
+
+            # For t > 0:
+            for t in range(1, len(tlist)):
+                expect_value = [
                     []
-                ] * self.dim  # expectation values für ein t zu jedem Level
+                ] * self.dim  # will contain expectation values of all levels for one t
                 dm_t[t] = scipy.linalg.expm(L * tlist[t]) @ np.reshape(
                     dm_t[0], (self.dim**2, 1)
                 )
-                for m in range(
-                    self.dim
-                ):  # für jedes t werden die expectation values zu jedem Level ausgerechnet
-                    zwischenresult[m] = qutip.expect(
+                for m in range(self.dim):
+                    expect_value[m] = qutip.expect(
                         qutip.Qobj(proj[m]),
                         qutip.Qobj(np.reshape(dm_t[t], (self.dim, self.dim))),
-                    )  # Das dürfte nicht stimmen, weil man ja in der L-Basis ist.
-                result[t] = np.array(
-                    np.reshape(zwischenresult, (self.dim,))
-                )  # für jedes t werden die 7 (je nach levelanzahl) expectation values hier eingesetzt.
-                # D.h. result[t] gibt eine Liste mit den Expectation values aller Level
-            result = np.array(result)
+                    )
+                result[t] = np.array(np.reshape(expect_value, (self.dim,)))
+            result = np.array(
+                result
+            )  # result[t] is a list of expectation values of all levels for the point of time that is indexed with t
             if plot_pop == True:
                 plot_population_diagonalization(tlist, result, self.dim)
-            return [np.real(np.amax(result[:, read_out_level])), delta_stark_shift]
+            return np.real(np.amax(result[:, read_out_level]))
 
         else:  # Integration-solver from QuTip
             tlist = list(range(0, maxtime, int(41300000 / 100)))
-            print("Länge von tlist: {}".format(len(tlist)))
+            print("Length of tlist: {}".format(len(tlist)))
             # opts=Options(nsteps=1000)
             # print(options)
-            start = time.time()
+            # start = time.time()
             result = qutip.mesolve(H, initial_state_dm, tlist, c_ops, proj)
-            end = time.time()
-            print(f"{end-start:5.3f}s")
+            # end = time.time()
+            # print(f"{end-start:5.3f}s")
             plot_population(result, self.dim)
             print(result.expect[1][-1])
+
+
+def plot_pulse(pulse, tlist):
+    fig, ax = plt.subplots()
+    pulse = np.array([pulse(t) for t in tlist])
+    tlist = np.array(tlist)
+    ax.set_yticks([0, 1], labels=[r"0", r"$\Omega$"])
+    ax.set_ylim([-0.1, 1.1])
+    ax.plot(tlist, pulse / max(pulse), label=r"$\Omega(t)$")
+    ax.legend()
+    ax.set_xlabel(r"Time")
+    ax.set_ylabel(r"Pulse amplitude")
+    plt.grid(linestyle=(0, (5, 10)), axis="both")
+    plt.show(fig)
+
+
+level1 = Level([0])
+level2 = Level([20])
+level3 = Level([100])
+
+decay = Decay([0], [[level3, level1]])
+
+# Parameter erster Fall
+Delta = 20
+delta = 0
+Omega2 = 1
+Omega3 = 1
+
+# Parameter zweiter Fall
+Delta = 20
+delta = 0.01
+Omega2 = 1
+Omega3 = 1
+
+Omega_eff = Omega2 * Omega3 / (2 * Delta)
+Omega_gen = np.sqrt(Omega_eff**2 + delta**2)
+Lambda = Omega_eff**2 / (Omega_gen**2)
+print(Omega_gen / (2 * np.pi))  # Ist die Frequenz
+print(1 / (Omega_gen / (2 * np.pi)))  # Ist die Periodendauer: 1/f
+print(Lambda)  # Ist die Amplitude
+
+
+# System
+laser1 = Laser(Omega2, 100 + Delta, [level1, level3])
+laser2 = Laser(Omega3, 80 + (Delta - delta), [level2, level3])
+system = System([level1, level2, level3], [laser1, laser2], decay)
+system.draw()
+system.fidelity(
+    [1, 0, 0, 0, 0, 0, 0],
+    0,
+    int(300),
+    Diagonalization=True,
+    delta_stark_shift=0,
+    plot_pop=True,
+    Trotterintervals=50,
+)
+
+
+# %% with pulses
+def pulse_2(t):
+    return Omega2 * np.exp(-0.5 * ((t - 150) / (50)) ** 2)
+
+
+def pulse_3(t):
+    return Omega3 * np.exp(-0.5 * ((t - 150) / (50)) ** 2)
+
+
+plot_pulse(pulse_2, range(0, 300, 1))
+
+# System
+laser1 = Laser(Omega2, 100 + Delta, [level1, level3], pulse=pulse_2)
+laser2 = Laser(Omega3, 80 + (Delta - delta), [level2, level3], pulse=pulse_3)
+system = System([level1, level2, level3], [laser1, laser2], decay)
+system.draw()
+system.fidelity(
+    [1, 0, 0, 0, 0, 0, 0],
+    0,
+    int(300),
+    Diagonalization=True,
+    delta_stark_shift=0,
+    plot_pop=True,
+    Trotterintervals=50,
+)
