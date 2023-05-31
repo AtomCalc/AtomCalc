@@ -56,7 +56,7 @@ class Level:
         if type(energy) != list:
             raise TypeError(
                 "Energy needs to be a list"
-            )  # ist inzwischen unnötig das als Liste zu machen
+            )  # meanwhile unnecessary to make this as a list
         self.energy = energy[0]
 
 
@@ -69,8 +69,8 @@ class Decay:
 
 
     Attributes:
-        rates (list): a list of decay rates.
-        final_states (list): a list of tupels of :class:`Level` objects that assign the decay rates to a corresponding transition.
+        rates (list): A list of decay rates.
+        final_states (list): A list of tupels of :class:`Level` objects that assign the decay rates to a corresponding transition.
 
     Example:
 
@@ -100,9 +100,9 @@ class Laser:
 
     Attributes:
         rabifreq (number): Rabi frequency of the laser.
-        frequency (number): frequency of the laser.
-        couple (list): a tupel of :class:`Level` objects that assigns the laser to this transition.
-        pulse (None or function or list): a time dependent function of the Rabi frequency of the laser OR a list of numbers describing a Rabi frequency pulse.
+        frequency (number): Frequency of the laser.
+        couple (list): A tupel of :class:`Level` objects that assigns the laser to this transition.
+        pulse (None or function or list): A time dependent function of the Rabi frequency of the laser OR a list of numbers describing a Rabi frequency pulse.
 
     Example:
 
@@ -110,14 +110,12 @@ class Laser:
         The transition between Level([20]) and Level([0]) is assigned a laser with Rabi frequency of 1 and a frequency of 100.
     """
 
-    def __init__(
-        self, rabifreq, frequency, couple, polarization=None, pulse=None
-    ):  # couple is a list of two Levels e.g. [level1, level2]
-        self.rabi = rabifreq  # Omega komplexwertig ist die Rabifrequenz
+    def __init__(self, rabifreq, frequency, couple, polarization=None, pulse=None):
+        self.rabi = rabifreq
         self.couple = couple
-        self.frequency = frequency  # omega
-        self.polarization = polarization  # Das ist eine Liste aus einem normierten E-Feld Vektor im Laserkoordinatensystem, einem Theta_k und einem Theta_p (in Grad) (siehe Skizze auf dem Blatt "Polarization") und einem Paar [m_i,m_f]
-        self.pulse = pulse  # Das ist die Puls-Funktion, also die zeitabhängige Rabi-Frequenz. In der Form einer Funktion "pulse(t)"
+        self.frequency = frequency
+        self.polarization = polarization  # Not yet included. A list of a normalized E-field vector in the laser coordinate system, a theta_k and a theta_p (in degrees) and a pair [m_i,m_f].
+        self.pulse = pulse
 
 
 class System:
@@ -133,6 +131,7 @@ class System:
         levels (list): A list of :class:`Level` objects.
         lasers (list): A list of :class:`Laser` objects.
         decay (class object): A :class:`Decay` object.
+        dim (number): Number of levels.
 
     Example:
         >>> level1 = Level([0])
@@ -147,12 +146,10 @@ class System:
         Sort levels by energy in ascending order and Laser couples from low to high.
     """
 
-    def __init__(
-        self, levels, lasers, decay
-    ):  # levels soll Liste von Level-Objekten sein. !Reihenfolge bestimmt Basisvektoren!
+    def __init__(self, levels, lasers, decay):
         self.lasers = lasers
         self.levels = levels
-        self.dim = len(levels)  # dim gibt die Anzahl an Leveln
+        self.dim = len(levels)
         self.decay = decay
 
     def draw(self):
@@ -231,13 +228,13 @@ class System:
 
         Attributes:
             initial_state_index_list (list): Initial population distribution. First entry denotes the population of the first level and so on. Length of the list needs to be equal to the level-count and the entries need to sum up to one.
-            read_out_level (number): determines which levels population maximum is printed in the output. 0 is the first level.
-            maxtime (integer): maximum time the system is simulated.
-            delta_stark_shift (number): detuning of the first level.
-            Diagonalization (bool): if False, simulate the system with the integration method 'qutip.mesolve' from QuTiP. If True, simulate the system using diagonalization.
-            plot_pop (bool): if False, do not show the population plot.
-            Trotterintervals (number): only relevant if a pulse is given. Discretisizes the pulse into a step function of `Trotterintervals` time intervals.
-            resolution (number): only relevant if Diagonalization = True. Divides the simulation time interval into `resolution` uniformly distributed points of time.
+            read_out_level (number): Determines which levels population maximum is printed in the output. 0 is the first level.
+            maxtime (integer): Maximum time the system is simulated.
+            delta_stark_shift (number): Detuning of the first level.
+            Diagonalization (bool): If False, simulate the system with the integration method 'qutip.mesolve' from QuTiP. If True, simulate the system using diagonalization.
+            plot_pop (bool): If False, do not show the population plot.
+            Trotterintervals (number): Only relevant if a pulse is given. Discretizes the pulse into a step function of `Trotterintervals` time intervals.
+            resolution (number): Only relevant if Diagonalization = True. Divides the simulation time interval into `resolution` uniformly distributed points of time.
 
         """
         Trotter = False
