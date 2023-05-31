@@ -1,11 +1,11 @@
 # %%
 # Imports
-# import numpy as np
-# import qutip
-# import matplotlib
-# import matplotlib.pylab as plt
-# import scipy
-# import time
+import numpy as np
+import qutip
+import matplotlib
+import matplotlib.pylab as plt
+import scipy
+import time
 
 
 def plot_population(result, dim):
@@ -36,7 +36,21 @@ def plot_population_diagonalization(tlist, result, dim):
 
 
 class Level:
-    """An example docstring for a class definition."""
+    """
+    An object that describes an energy level.
+
+    Args:
+        energy (list): value for :attr:`energy`
+
+
+    Attributes:
+        energy (list): A list of a number that is the energy of the level.
+
+    Example:
+
+        Level([5])
+        This is a Level object with an energy of 5.
+    """
 
     def __init__(self, energy):
         if type(energy) != list:
@@ -47,7 +61,22 @@ class Level:
 
 
 class Decay:
-    """Ein Objekt gibt alle decays an. Fuer jedes couple in final_states muss es ein gamma in rates geben."""
+    """An object that describes the decay of the system with the decay rates and the respective transitions.
+
+    Args:
+        rates (list): value for :attr:`rates`
+        final_states (list): value for :attr:`final_states`
+
+
+    Attributes:
+        rates (list): A list of numbers that are the decay rates.
+        final_states (list): A list of tupels of :class:`Level` objects that assign the decay rates to a corresponding transition.
+
+    Example:
+
+        Decay([0, 1], [[Level([20]), Level([0])], [Level([5]), Level([0])]])
+        The transition between Level([20]) and Level([0]) is assigned a decay rate of 0. The transition between Level([5]) and Level([0]) is assigned a decay rate of 1.
+    """
 
     def __init__(
         self, rates, final_states
@@ -60,19 +89,28 @@ class Decay:
 
 class Laser:
     """
-    characterizing values for the laser: Rabi-Frequency, frequency and coupled states.
+    An object that describes values for a laser: Rabi frequency, frequency, and coupled states.
+
+    Args:
+        rabifreq (number): value for :attr:`rabifreq`
+        frequency (number): value for :attr:`frequency`
+        couple (list): value for :attr:`couple`
+
+
+    Attributes:
+        rabifreq (number): A number that is the Rabi frequency of the laser.
+        frequency (number): A number that is the frequency of the laser.
+        couple (list): A tupel of :class:`Level` objects that assigns the laser to this transition.
+
+    Example:
+
+        Laser(1, 100, [Level([0]),Level([20])])
+        The transition between Level([20]) and Level([0]) is assigned a laser with Rabi frequency of 1 and a frequency of 100.
     """
 
     def __init__(
         self, rabifreq, frequency, couple, polarization=None, pulse=None
     ):  # couple is a list of two Levels e.g. [level1, level2]
-        """
-        Blah blah blah.
-        Parameters
-        ---------
-        name
-            A string to assign to the `name` instance attribute.
-        """
         self.rabi = rabifreq  # Omega komplexwertig ist die Rabifrequenz
         self.couple = couple
         self.frequency = frequency  # omega
@@ -81,9 +119,27 @@ class Laser:
 
 
 class System:
-    """
-    methods: draw and get_population
-    lasers & levels: list of lasers & levels that act in the system
+    """An object that inherits all parameters used for simulation of the system.
+
+    Args:
+        levels (list): value for :attr:`levels`
+        lasers (list): value for :attr:`lasers`
+        decay (class object): value for :attr:`decay`
+
+
+    Attributes:
+        levels (list): A list of :class:`Level` objects.
+        lasers (list): A list of :class:`Laser` objects.
+        decay (class object): A :class:`Decay` object.
+
+    Example:
+        level1 = Level([0])
+        level2 = Level([20])
+        level3 = Level([100])
+        laser1 = Laser(1, 120, [level1,level3])
+        laser2 = Laser(1, 100, [level2,level3])
+        decay = Decay([0],[[level3,level1]])
+        system = System([level1, level2, level3], [laser1,laser2], decay)
     """
 
     def __init__(
