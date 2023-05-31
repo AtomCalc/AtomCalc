@@ -8,33 +8,6 @@
 # import time
 
 
-def plot_population(result, dim):
-    fig, ax = plt.subplots()
-    for i in range(dim):
-        if i != 12:
-            ax.plot(
-                result.times, result.expect[i], linewidth=1, label="{}".format(i + 1)
-            )
-    ax.legend()
-    ax.set_ylim([-0.01, 1.01])
-    ax.set_xlabel("Time")
-    ax.set_ylabel("Population")
-    plt.show()
-
-
-def plot_population_diagonalization(tlist, result, dim):
-    fig, ax = plt.subplots()
-    tlist = np.array(tlist)
-    n = dim
-    for i in range(dim):
-        ax.plot(tlist, np.real(result[:, i]), linewidth=1.5, label="{}".format(i + 1))
-    ax.legend()
-    ax.set_ylim([-0.1, 1.1])
-    ax.set_xlabel(r"Time")
-    ax.set_ylabel(r"Population")
-    plt.show()
-
-
 class Level:
     """
     An object that describes an energy level.
@@ -579,6 +552,7 @@ class System:
             print(result.expect[1][-1])
 
 
+# Plotting functions
 def plot_pulse(pulse, tlist):
     fig, ax = plt.subplots()
     pulse = np.array([pulse(t) for t in tlist])
@@ -591,3 +565,30 @@ def plot_pulse(pulse, tlist):
     ax.set_ylabel(r"Pulse amplitude")
     plt.grid(linestyle=(0, (5, 10)), axis="both")
     plt.show(fig)
+
+
+def plot_population(result, dim):
+    fig, ax = plt.subplots()
+    for i in range(dim):
+        if i != 12:
+            ax.plot(
+                result.times, result.expect[i], linewidth=1, label="{}".format(i + 1)
+            )
+    ax.legend()
+    ax.set_ylim([-0.01, 1.01])
+    ax.set_xlabel("Time")
+    ax.set_ylabel("Population")
+    plt.show()
+
+
+def plot_population_diagonalization(tlist, result, dim):
+    fig, ax = plt.subplots()
+    tlist = np.array(tlist)
+    n = dim
+    for i in range(dim):
+        ax.plot(tlist, np.real(result[:, i]), linewidth=1.5, label="{}".format(i + 1))
+    ax.legend()
+    ax.set_ylim([-0.1, 1.1])
+    ax.set_xlabel(r"Time")
+    ax.set_ylabel(r"Population")
+    plt.show()
