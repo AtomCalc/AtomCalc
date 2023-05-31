@@ -38,18 +38,6 @@ def plot_population_diagonalization(tlist, result, dim):
 class Level:
     """
     An object that describes an energy level.
-
-    Args:
-        energy (list): value for :attr:`energy`
-
-
-    Attributes:
-        energy (list): A list of a number that is the energy of the level.
-
-    Example:
-
-        Level([5])
-        This is a Level object with an energy of 5.
     """
 
     def __init__(self, energy):
