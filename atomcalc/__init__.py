@@ -13,3 +13,5 @@
 #     plot_population,
 #     plot_population_diagonalization,
 # )
+
+import .fidelity

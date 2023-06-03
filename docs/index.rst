@@ -12,7 +12,7 @@ Welcome to AtomCalc's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-
+   notebooks/Example1
 
 Indices and tables
 ==================
