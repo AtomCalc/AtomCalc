@@ -7,10 +7,10 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.8.5,<3.12"
-scipy = "1.6.0"
-numpy = "1.24.3"
-qutip = "4.7.1"
+numpy = "^1.24.3"
 matplotlib = "^3.7.1"
+scipy = "1.6.0"
+qutip = "^4.7.1"
 
 
 [tool.poetry.group.dev.dependencies]
