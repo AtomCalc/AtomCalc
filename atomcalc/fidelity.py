@@ -1,10 +1,12 @@
 # %%
 # Imports
-# import numpy as np
-# import qutip
+import numpy as np
+import qutip
+
 # import matplotlib
-# import matplotlib.pylab as plt
-# import scipy
+import matplotlib.pylab as plt
+import scipy
+
 # import time
 
 
