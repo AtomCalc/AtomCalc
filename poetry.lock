@@ -831,6 +831,18 @@ files = [
 plugins = ["importlib-metadata"]
 
 [[package]]
+name = "pypandoc"
+version = "1.11"
+description = "Thin wrapper for pandoc."
+category = "dev"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "pypandoc-1.11-py3-none-any.whl", hash = "sha256:b260596934e9cfc6513056110a7c8600171d414f90558bf4407e68b209be8007"},
+    {file = "pypandoc-1.11.tar.gz", hash = "sha256:7f6d68db0e57e0f6961bec2190897118c4d305fc2d31c22cd16037f22ee084a5"},
+]
+
+[[package]]
 name = "pyrsistent"
 version = "0.19.3"
 description = "Persistent/Functional/Immutable data structures"
@@ -1392,4 +1404,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8.5"
-content-hash = "e86c4ec96047bd7c23d38d1163b7e7156af65b28895461a1aee886c24fdb412c"
+content-hash = "08d0c6852f5c0b69091facf2e83ad21c33ae78b99df1cc988755b028e084fa79"
