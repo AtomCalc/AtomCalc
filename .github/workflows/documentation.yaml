@@ -12,6 +12,7 @@ jobs:
       - name: Install
         run: |
           poetry install
+          sudo apt install pandoc
       - name: Sphinx build
         run: |
           cd docs/

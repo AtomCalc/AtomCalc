@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.abspath(".."))
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    "myst_nb",
+    "nbsphinx",
     "sphinx_rtd_theme",
     "sphinx.ext.autodoc",
     "sphinx.ext.mathjax",
