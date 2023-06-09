@@ -75,7 +75,7 @@ class Laser:
 
     Attributes:
         rabifreq (number): Rabi frequency of the laser.
-        frequency (number): Frequency of the laser.
+        frequency (number): The to the frequency of the laser corresponding energy.
         couple (list): A tupel of :class:`Level` objects that assigns the laser to this transition.
         pulse (None or function or list): A time dependent function of the Rabi frequency of the laser OR a list of numbers describing a Rabi frequency pulse.
 
@@ -83,6 +83,9 @@ class Laser:
 
         >>> Laser(1, 100, [Level([0]),Level([20])])
         The transition between Level([20]) and Level([0]) is assigned a laser with Rabi frequency of 1 and a frequency of 100.
+
+    Note:
+        Sort Level couples from low to high.
     """
 
     def __init__(self, rabifreq, frequency, couple, polarization=None, pulse=None):
@@ -118,7 +121,7 @@ class System:
         >>> system = System([level1, level2, level3], [laser1,laser2], decay)
 
     Note:
-        Sort levels by energy in ascending order and Laser couples from low to high.
+        Sort levels by energy in ascending order.
     """
 
     def __init__(self, levels, lasers, decay):
@@ -189,7 +192,7 @@ class System:
         resolution=250,
     ):
         """
-        An object that describes values for a laser: Rabi frequency, frequency, and coupled states.
+        A function to calculate the maximum population of the read_out_level
 
         Args:
             initial_state_index_list (list): value for :attr:`initial_state_index_list`
@@ -492,6 +495,7 @@ class System:
             )  # result[t] is a list of expectation values of all levels for the point of time that is indexed with t
             if plot_pop == True:
                 plot_population_diagonalization(tlist_ges[:], result[:], self.dim)
+            print("Maximum population of level {}:".format(read_out_level + 1))
             return np.real(np.amax(result[:, read_out_level]))
 
         elif Diagonalization == True:
@@ -539,9 +543,10 @@ class System:
             )  # result[t] is a list of expectation values of all levels for the point of time that is indexed with t
             if plot_pop == True:
                 plot_population_diagonalization(tlist, result, self.dim)
+            print("Maximum population of level {}:".format(read_out_level + 1))
             return np.real(np.amax(result[:, read_out_level]))
 
-        else:  # Integration-solver from QuTip
+        else:  # Integration-solver from QuTip. See QuTiP Documentation of the mesolve function.
             tlist = list(range(0, maxtime, int(41300000 / 100)))
             print("Length of tlist: {}".format(len(tlist)))
             # opts=Options(nsteps=1000)
