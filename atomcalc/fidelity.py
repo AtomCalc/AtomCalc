@@ -15,24 +15,20 @@ class Level:
     An object that describes an energy level.
 
     Args:
-        energy (list): value for :attr:`energy`
+        energy (number): value for :attr:`energy`
 
 
     Attributes:
-        energy (list): A list of a number that is the energy of the level.
+        energy (number): The energy of the level.
 
     Example:
 
-        >>> Level([5])
+        >>> Level(5)
         This is a Level object with an energy of 5.
     """
 
     def __init__(self, energy):
-        if type(energy) != list:
-            raise TypeError(
-                "Energy needs to be a list"
-            )  # meanwhile unnecessary to make this as a list
-        self.energy = energy[0]
+        self.energy = energy
 
 
 class Decay:
