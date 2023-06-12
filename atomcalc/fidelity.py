@@ -45,8 +45,8 @@ class Decay:
 
     Example:
 
-        >>> Decay([0, 1], [[Level([20]), Level([0])], [Level([5]), Level([0])]])
-        The transition between Level([20]) and Level([0]) is assigned a decay rate of 0. The transition between Level([5]) and Level([0]) is assigned a decay rate of 1.
+        >>> Decay([0, 1], [[Level(20), Level(0)], [Level(5), Level(0)]])
+        The transition between Level(20) and Level(0) is assigned a decay rate of 0. The transition between Level(5) and Level(0) is assigned a decay rate of 1.
     """
 
     def __init__(
@@ -77,8 +77,8 @@ class Laser:
 
     Example:
 
-        >>> Laser(1, 100, [Level([0]),Level([20])])
-        The transition between Level([20]) and Level([0]) is assigned a laser with Rabi frequency of 1 and a frequency of 100.
+        >>> Laser(1, 100, [Level(0),Level(20)])
+        The transition between Level(20) and Level(0) is assigned a laser with Rabi frequency of 1 and a frequency of 100.
 
     Note:
         Sort Level couples from low to high.
@@ -108,9 +108,9 @@ class System:
         dim (number): Number of levels.
 
     Example:
-        >>> level1 = Level([0])
-        >>> level2 = Level([20])
-        >>> level3 = Level([100])
+        >>> level1 = Level(0)
+        >>> level2 = Level(20)
+        >>> level3 = Level(100)
         >>> laser1 = Laser(1, 120, [level1,level3])
         >>> laser2 = Laser(1, 100, [level2,level3])
         >>> decay = Decay([0],[[level3,level1]])
