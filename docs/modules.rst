@@ -1,4 +1,4 @@
-Documentation of the code
+Classes
 =======================
 
 .. automodule:: atomcalc.fidelity
