@@ -27,7 +27,7 @@ class Laser:
         The transition between Level(20) and Level(0) is assigned a laser with Rabi frequency of 1 and a frequency of 100.
 
     Note:
-        Sort Level couples from low to high.
+        Level couples need to be sorted by energy in ascending order.
     """
 
     def __init__(self, rabifreq, frequency, couple, polarization=None, pulse=None):

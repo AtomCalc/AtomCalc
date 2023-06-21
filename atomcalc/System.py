@@ -29,7 +29,7 @@ class System:
         >>> system = System([level1, level2, level3], [laser1,laser2], decay)
 
     Note:
-        Sort levels by energy in ascending order.
+        Levels need to be sorted by energy in ascending order.
     """
 
     def __init__(self, levels, lasers, decay):
