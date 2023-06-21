@@ -1,5 +1,3 @@
-Classes
-=======================
 
 .. automodule:: atomcalc
    :members:
