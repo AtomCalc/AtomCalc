@@ -9,7 +9,7 @@ Modules
 .. autoclass:: atomcalc.Level
    :members:
 
-.. autofunction:: atomcalc.plot_pulse
+.. automodule:: atomcalc.plot_pulse
 
 .. autoclass:: atomcalc.System
    :members:
