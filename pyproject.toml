@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "atomcalc"
-version = "0.1.1"
+version = "0.1.2"
 description = ""
 authors = ["Moritz Wilke"]
 readme = "README.md"
@@ -25,3 +25,6 @@ ipython = "^7.1.1"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[project.urls]
+homepage="https://atomcalc.github.io/AtomCalc/"
