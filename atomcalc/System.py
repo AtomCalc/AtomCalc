@@ -1,95 +1,7 @@
-# %%
-# Imports
 import numpy as np
 import qutip
-
-# import matplotlib
 import matplotlib.pylab as plt
 import scipy
-
-# import time
-
-
-class Level:
-    """
-    An object that describes an energy level.
-
-    Args:
-        energy (number): value for :attr:`energy`
-
-
-    Attributes:
-        energy (number): The energy of the level.
-
-    Example:
-
-        >>> Level(5)
-        This is a Level object with an energy of 5.
-    """
-
-    def __init__(self, energy):
-        self.energy = energy
-
-
-class Decay:
-    """An object that describes the decay of the system with the decay rates and the respective transitions.
-
-    Args:
-        rates (list): value for :attr:`rates`
-        final_states (list): value for :attr:`final_states`
-
-
-    Attributes:
-        rates (list): A list of decay rates.
-        final_states (list): A list of tupels of :class:`Level` objects that assign the decay rates to a corresponding transition.
-
-    Example:
-
-        >>> Decay([0, 1], [[Level(20), Level(0)], [Level(5), Level(0)]])
-        The transition between Level(20) and Level(0) is assigned a decay rate of 0. The transition between Level(5) and Level(0) is assigned a decay rate of 1.
-    """
-
-    def __init__(
-        self, rates, final_states
-    ):  # final_states is a Level-list with two-level-couples in each entry. rates is the respective decay-rate-list to each couple
-        if type(rates) != list or type(final_states) != list:
-            raise TypeError("rates and final_states need to be a list")
-        self.rates = np.array(rates)
-        self.final_states = np.array(final_states)
-
-
-class Laser:
-    """
-    An object that describes values for a laser: Rabi frequency, frequency, and coupled states.
-
-    Args:
-        rabifreq (number): value for :attr:`rabifreq`
-        frequency (number): value for :attr:`frequency`
-        couple (list): value for :attr:`couple`
-        pulse (None or function or list): value for :attr:`pulse`
-
-
-    Attributes:
-        rabifreq (number): Rabi frequency of the laser.
-        frequency (number): The to the frequency of the laser corresponding energy.
-        couple (list): A tupel of :class:`Level` objects that assigns the laser to this transition.
-        pulse (None or function or list): A time dependent function of the Rabi frequency of the laser OR a list of numbers describing a Rabi frequency pulse.
-
-    Example:
-
-        >>> Laser(1, 100, [Level(0),Level(20)])
-        The transition between Level(20) and Level(0) is assigned a laser with Rabi frequency of 1 and a frequency of 100.
-
-    Note:
-        Sort Level couples from low to high.
-    """
-
-    def __init__(self, rabifreq, frequency, couple, polarization=None, pulse=None):
-        self.rabi = rabifreq
-        self.couple = couple
-        self.frequency = frequency
-        self.polarization = polarization  # Not yet included. A list of a normalized E-field vector in the laser coordinate system, a theta_k and a theta_p (in degrees) and a pair [m_i,m_f].
-        self.pulse = pulse
 
 
 class System:
@@ -176,7 +88,7 @@ class System:
         plt.legend(loc="center left", bbox_to_anchor=(1, 0.5))
         plt.show()
 
-    def fidelity(
+    def simulate(
         self,
         initial_state_index_list,
         read_out_level,
@@ -188,7 +100,7 @@ class System:
         resolution=250,
     ):
         """
-        A function to calculate the maximum population of the read_out_level
+        A function to simulate the time evolution of the population of every level. It also returns the maximum population of specifically the read_out_level.
 
         Args:
             initial_state_index_list (list): value for :attr:`initial_state_index_list`
@@ -361,7 +273,7 @@ class System:
                 else:
                     H = H + (1 / 2 * rabifreqs[n]) * (H_couple1[n] + H_couple2[n])
         print(
-            "Transformed Hamiltonian: {}".format(H)
+            "Hamiltonian in the rotating frame: {}".format(H)
         )  # Only the Rabi frequency entries are missing if the pulse is time dependent.
 
         # The Hamiltonian is created, now we solve it.
@@ -416,8 +328,6 @@ class System:
             L = [[]] * len(td)
             # For t > 0:
             for n in range(len(td) - 1):  # loop over all trotter intervals
-                if n % 100 == 0:
-                    print(n)
                 # add the Rabi frequency entries for the Trotter interval we want to simulate here
                 for i in range(len(lasermitpuls_index)):
                     if hasattr(
@@ -553,21 +463,6 @@ class System:
             # print(f"{end-start:5.3f}s")
             plot_population(result, self.dim)
             print(result.expect[1][-1])
-
-
-# Plotting functions
-def plot_pulse(pulse, tlist):
-    fig, ax = plt.subplots()
-    pulse = np.array([pulse(t) for t in tlist])
-    tlist = np.array(tlist)
-    ax.set_yticks([0, 1], labels=[r"0", r"$\Omega$"])
-    ax.set_ylim([-0.1, 1.1])
-    ax.plot(tlist, pulse / max(pulse), label=r"$\Omega(t)$")
-    ax.legend()
-    ax.set_xlabel(r"Time")
-    ax.set_ylabel(r"Pulse amplitude")
-    plt.grid(linestyle=(0, (5, 10)), axis="both")
-    plt.show(fig)
 
 
 def plot_population(result, dim):

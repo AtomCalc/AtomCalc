@@ -15,12 +15,12 @@ The methods used in the code are explained in my master thesis which can be obta
 
 The code is documented in the `Code`_ section of this documentation. 
 The whole python file can be accessed on the corresponding `GitHub page`_.
-The tutorials can also be accessed on `GitHub`_ as Jupyter notebooks.
+The tutorials can also be accessed on GitHub as `Jupyter notebooks`_.
 
 
 
-.. _GitHub page: https://github.com/AtomCalc/AtomCalc/tree/main/atomcalc
-.. _GitHub: https://github.com/AtomCalc/AtomCalc/tree/main/docs/notebooks
+.. _GitHub page: https://github.com/AtomCalc/AtomCalc
+.. _Jupyter notebooks: https://github.com/AtomCalc/AtomCalc/tree/main/docs/notebooks
 .. _Code: https://atomcalc.github.io/AtomCalc/modules.html
 
 Installation
@@ -39,7 +39,7 @@ AtomCalc can be installed with ``pip install atomcalc``. Its dependencies are Ma
 
 .. toctree::
    :maxdepth: 2
-   :caption: Code:
+   :caption: Classes and Functions:
 
    modules
 
