@@ -1,3 +1,5 @@
+Modules
+=======================
 
 .. automodule:: atomcalc
    :members:
