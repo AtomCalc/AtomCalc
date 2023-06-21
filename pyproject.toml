@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "atomcalc"
-version = "0.1.4"
+version = "0.1.5"
 description = ""
 authors = ["Moritz Wilke"]
 readme = "README.md"
@@ -26,5 +26,5 @@ ipython = "^7.1.1"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[project.urls]
-Source = "https://github.com/pypa/flit"
+[tool.poetry.urls]
+homepage="https://atomcalc.github.io/AtomCalc/"
