@@ -1,5 +1,5 @@
 Classes
 =======================
 
-.. automodule:: atomcalc
+.. automodule:: atomcalc.System
    :members:
