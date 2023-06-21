@@ -1,16 +1,16 @@
 Modules
 =======================
-.. automodule:: atomcalc.Decay
+.. autoclass:: atomcalc.Decay
    :members:
 
-.. automodule:: atomcalc.Laser
+.. autoclass:: atomcalc.Laser
    :members:
 
-.. automodule:: atomcalc.Level
+.. autoclass:: atomcalc.Level
    :members:
 
-.. automodule:: atomcalc.plot_pulse
+.. autofunction:: atomcalc.plot_pulse
    :members:
 
-.. automodule:: atomcalc.System
+.. autoclass:: atomcalc.System
    :members:
