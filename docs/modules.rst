@@ -10,7 +10,6 @@ Modules
    :members:
 
 .. autofunction:: atomcalc.plot_pulse
-   :members:
 
 .. autoclass:: atomcalc.System
    :members:
