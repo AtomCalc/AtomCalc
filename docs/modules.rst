@@ -1,5 +1,4 @@
-Modules
-=======================
+
 .. autoclass:: atomcalc.Decay
    :members:
 
@@ -9,7 +8,7 @@ Modules
 .. autoclass:: atomcalc.Level
    :members:
 
-.. automodule:: atomcalc.plot_pulse
+.. autofunction:: atomcalc.plot_pulse
 
 .. autoclass:: atomcalc.System
    :members:

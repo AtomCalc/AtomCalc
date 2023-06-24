@@ -41,17 +41,5 @@ AtomCalc can be installed with ``pip install atomcalc``. Its dependencies are Ma
    :maxdepth: 2
    :caption: Classes and Functions:
 
-.. autoclass:: atomcalc.Decay
-   :members:
-
-.. autoclass:: atomcalc.Laser
-   :members:
-
-.. autoclass:: atomcalc.Level
-   :members:
-
-.. autofunction:: atomcalc.plot_pulse
-
-.. autoclass:: atomcalc.System
-   :members:
+   modules
 
