@@ -11,10 +11,6 @@ def plot_pulse(pulse, tlist):
     A function to plot a pulse function.
 
     Args:
-        pulse (function): value for :attr:`pulse`
-        tlist (list): value for :attr:`tlist`
-
-    Attributes:
         pulse (function): A time dependent pulse function.
         tlist (list): A list of points in time where the pulse should be plotted.
 

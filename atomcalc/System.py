@@ -88,39 +88,72 @@ class System:
         plt.legend(loc="center left", bbox_to_anchor=(1, 0.5))
         plt.show()
 
+    def _plot_population(self, result, dim):
+        fig, ax = plt.subplots()
+        for i in range(dim):
+            if i != 12:
+                ax.plot(
+                    result.times,
+                    result.expect[i],
+                    linewidth=1,
+                    label="{}".format(i + 1),
+                )
+        ax.legend()
+        ax.set_ylim([-0.01, 1.01])
+        ax.set_xlabel("Time")
+        ax.set_ylabel("Population")
+        plt.show()
+
+    def _plot_population_diagonalization(self, tlist, result, dim):
+        fig, ax = plt.subplots()
+        tlist = np.array(tlist)
+        n = dim
+        for i in range(dim):
+            ax.plot(
+                tlist, np.real(result[:, i]), linewidth=1.5, label="{}".format(i + 1)
+            )
+        ax.legend()
+        ax.set_ylim([-0.1, 1.1])
+        ax.set_xlabel(r"Time")
+        ax.set_ylabel(r"Population")
+        plt.show()
+
     def simulate(
         self,
         initial_state_index_list,
-        read_out_level,
+        level_to_print_max_value,
         maxtime,
         delta_stark_shift=0,
         Diagonalization=True,
         plot_pop=True,
         Trotterintervals=500,
+        points_per_TI=2,
         resolution=250,
     ):
         """
-        A function to simulate the time evolution of the population of every level. It also returns the maximum population of specifically the read_out_level.
+        A function to simulate the time evolution of the population of every level. It also returns the maximum population of specifically the level_to_print_max_value.
 
         Args:
             initial_state_index_list (list): value for :attr:`initial_state_index_list`
-            read_out_level (number): value for :attr:`read_out_level`
+            level_to_print_max_value (number): value for :attr:`level_to_print_max_value`
             maxtime (integer): value for :attr:`maxtime`
             delta_stark_shift (number): value for :attr:`delta_stark_shift`
             Diagonalization (bool): value for :attr:`Diagonalization`
             plot_pop (bool): value for :attr:`plot_pop`
-            Trotterintervals (number) : value for :attr:`Trotterintervals`
+            Trotterintervals (number): value for :attr:`Trotterintervals`
+            points_per_TI (number): value for :attr:`points_per_TI`
             resolution (number): value for :attr:`resolution`
 
         Attributes:
             initial_state_index_list (list): Initial population distribution. First entry denotes the population of the first level and so on. Length of the list needs to be equal to the level-count and the entries need to sum up to one.
-            read_out_level (number): Determines which levels population maximum is printed in the output. 0 is the first level.
+            level_to_print_max_value (number): Just affects the output. Determines which levels population maximum is printed in the output. 0 is the first level.
             maxtime (integer): Maximum time the system is simulated.
             delta_stark_shift (number): Detuning of the first level.
             Diagonalization (bool): If False, simulate the system with the integration method 'qutip.mesolve' from QuTiP. If True, simulate the system using diagonalization.
             plot_pop (bool): If False, do not show the population plot.
             Trotterintervals (number): Only relevant if a pulse is given. Discretizes the pulse into a step function of `Trotterintervals` time intervals.
-            resolution (number): Only relevant if Diagonalization = True. Divides the simulation time interval into `resolution` uniformly distributed points of time.
+            points_per_TI (number): Only relevant if a pulse is given. Divides one trotterinterval in points_per_TI intervals. This determines the number of points calculated within one trotterinterval.
+            resolution (number): Only relevant if Diagonalization = True and no pulse is given. Divides the simulation time interval into `resolution` uniformly distributed points of time.
 
         """
         Trotter = False
@@ -294,7 +327,6 @@ class System:
                 )
             td = np.linspace(0, maxtime, number_TI + 1)
             print("One trotterinterval has size {}.".format(td[1]))
-            points_per_TI = 2  # divides one trotterinterval in points_per_TI intervals
             if td[1] / points_per_TI != int(td[1] / points_per_TI):
                 raise Exception(
                     "The number of timeintervals per trotterinterval of {} doesnt divide one trotterinterval of size {} into timeintervals with integer time".format(
@@ -400,9 +432,11 @@ class System:
                 result
             )  # result[t] is a list of expectation values of all levels for the point of time that is indexed with t
             if plot_pop == True:
-                plot_population_diagonalization(tlist_ges[:], result[:], self.dim)
-            print("Maximum population of level {}:".format(read_out_level + 1))
-            return np.real(np.amax(result[:, read_out_level]))
+                self._plot_population_diagonalization(tlist_ges[:], result[:], self.dim)
+            print(
+                "Maximum population of level {}:".format(level_to_print_max_value + 1)
+            )
+            return np.real(np.amax(result[:, level_to_print_max_value]))
 
         elif Diagonalization == True:
             # Liouvillian
@@ -448,9 +482,11 @@ class System:
                 result
             )  # result[t] is a list of expectation values of all levels for the point of time that is indexed with t
             if plot_pop == True:
-                plot_population_diagonalization(tlist, result, self.dim)
-            print("Maximum population of level {}:".format(read_out_level + 1))
-            return np.real(np.amax(result[:, read_out_level]))
+                self._plot_population_diagonalization(tlist, result, self.dim)
+            print(
+                "Maximum population of level {}:".format(level_to_print_max_value + 1)
+            )
+            return np.real(np.amax(result[:, level_to_print_max_value]))
 
         else:  # Integration-solver from QuTip. See QuTiP Documentation of the mesolve function.
             tlist = list(range(0, maxtime, int(41300000 / 100)))
@@ -461,32 +497,5 @@ class System:
             result = qutip.mesolve(H, initial_state_dm, tlist, c_ops, proj)
             # end = time.time()
             # print(f"{end-start:5.3f}s")
-            plot_population(result, self.dim)
+            self._plot_population(result, self.dim)
             print(result.expect[1][-1])
-
-
-def plot_population(result, dim):
-    fig, ax = plt.subplots()
-    for i in range(dim):
-        if i != 12:
-            ax.plot(
-                result.times, result.expect[i], linewidth=1, label="{}".format(i + 1)
-            )
-    ax.legend()
-    ax.set_ylim([-0.01, 1.01])
-    ax.set_xlabel("Time")
-    ax.set_ylabel("Population")
-    plt.show()
-
-
-def plot_population_diagonalization(tlist, result, dim):
-    fig, ax = plt.subplots()
-    tlist = np.array(tlist)
-    n = dim
-    for i in range(dim):
-        ax.plot(tlist, np.real(result[:, i]), linewidth=1.5, label="{}".format(i + 1))
-    ax.legend()
-    ax.set_ylim([-0.1, 1.1])
-    ax.set_xlabel(r"Time")
-    ax.set_ylabel(r"Population")
-    plt.show()
