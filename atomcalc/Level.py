@@ -13,12 +13,12 @@ class Level:
 
 
     Attributes:
-        energy (number): The energy of the level.
+        energy (number): The energy of the level given as angular frequency.
 
     Example:
 
         >>> Level(5)
-        This is a Level object with an energy of 5.
+        This is a Level object with an energy of 5, given as an angular frequency.
     """
 
     def __init__(self, energy):

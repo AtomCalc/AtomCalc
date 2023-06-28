@@ -6,7 +6,7 @@
 Welcome to AtomCalc's documentation!
 ====================================
 
-AtomCalc simulates the interaction between multi-level atoms and laser fields. It calculates how the population of the electronic levels of an atom changes if laser pulses are applied. To allow for realistic simulations, the motional state of the atom and decay channels can be taken into account.
+AtomCalc simulates the interaction between multi-level atoms and laser fields. It calculates how the population of the electronic levels of an atom changes if laser pulses are applied. To allow for realistic simulations, decay channels can be taken into account. A tutorial on how to simulate motional states can be found `here`_.
 A system is defined by the levels, the lasers, and decay paths. For each of them exists one class that owns the corresponding properties.
 The time evolution of the population of each level is then calculated with the ``simulate`` function that uses a Lindblad master equation approach.
 
@@ -22,6 +22,7 @@ The tutorials can also be accessed on GitHub as `Jupyter notebooks`_.
 .. _GitHub page: https://github.com/AtomCalc/AtomCalc
 .. _Jupyter notebooks: https://github.com/AtomCalc/AtomCalc/tree/main/docs/notebooks
 .. _Modules: https://atomcalc.github.io/AtomCalc/modules.html
+.. _here: https://atomcalc.github.io/AtomCalc/notebooks/Example4.html
 
 Installation
 ============

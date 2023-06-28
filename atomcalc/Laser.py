@@ -11,14 +11,15 @@ class Laser:
 
     Args:
         rabifreq (number): value for :attr:`rabifreq`
-        frequency (number): value for :attr:`frequency`
+        detuning (number): value for :attr:`detuning`
         couple (list): value for :attr:`couple`
         pulse (None or function or list): value for :attr:`pulse`
 
 
     Attributes:
         rabifreq (number): Rabi frequency of the laser as angular frequency.
-        frequency (number): The to the frequency of the laser corresponding energy.
+        frequency (number): The angular frequency of the laser. Represents the energy gap of the transition.
+        detuning (number): The detuning of the laser.
         couple (list): A tupel of :class:`Level` objects that assigns the laser to this transition.
         pulse (None or function or list): A time dependent function of the Rabi frequency of the laser OR a list of numbers describing a Rabi frequency pulse.
 
@@ -31,9 +32,10 @@ class Laser:
         Level couples need to be sorted by energy in ascending order.
     """
 
-    def __init__(self, rabifreq, frequency, couple, polarization=None, pulse=None):
+    def __init__(self, rabifreq, detuning, couple, polarization=None, pulse=None):
         self.rabi = rabifreq
         self.couple = couple
-        self.frequency = frequency
+        self.detuning = detuning
+        self.frequency = np.abs(couple[0].energy - couple[1].energy) + detuning
         self.polarization = polarization  # Not yet included. A list of a normalized E-field vector in the laser coordinate system, a theta_k and a theta_p (in degrees) and a pair [m_i,m_f].
         self.pulse = pulse
