@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to AtomCalc’s documentation! &mdash; AtomCalc  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. Simulating a Raman transition with constant lasers" href="notebooks/Example1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            AtomCalc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Example1.html">1. Simulating a Raman transition with constant lasers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Example2.html">2. Simulating a Raman transition with laser pulses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Example3.html">3. Conveniently shifting the first level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Example4.html">4. Motional state system</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Classes and Functions:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html"><code class="docutils literal notranslate"><span class="pre">Decay</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#atomcalc.Laser"><code class="docutils literal notranslate"><span class="pre">Laser</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#atomcalc.Level"><code class="docutils literal notranslate"><span class="pre">Level</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#atomcalc.plot_pulse"><code class="docutils literal notranslate"><span class="pre">plot_pulse()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#atomcalc.System"><code class="docutils literal notranslate"><span class="pre">System</span></code></a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">AtomCalc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Welcome to AtomCalc’s documentation!</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="welcome-to-atomcalc-s-documentation">
+<h1>Welcome to AtomCalc’s documentation!<a class="headerlink" href="#welcome-to-atomcalc-s-documentation" title="Permalink to this heading"></a></h1>
+<p>AtomCalc simulates the interaction between multi-level atoms and laser fields. It calculates how the population of the electronic levels of an atom changes if laser pulses are applied. To allow for realistic simulations, decay channels can be taken into account. A tutorial on how to simulate motional states can be found <a class="reference external" href="https://atomcalc.github.io/AtomCalc/notebooks/Example4.html">here</a>.
+A system is defined by the levels, the lasers, and decay paths. For each of them exists one class that owns the corresponding properties.
+The time evolution of the population of each level is then calculated with the <code class="docutils literal notranslate"><span class="pre">simulate</span></code> function that uses a Lindblad master equation approach.</p>
+<p>This project is supposed to be expanded and should be seen as a construction fundament.
+The methods used in the code are explained in my master thesis which can be obtained via the 5th institute of physics of the university of Stuttgart.</p>
+<p>The code is documented in the <a class="reference external" href="https://atomcalc.github.io/AtomCalc/modules.html">Classes and Functions</a> section of this documentation.
+The whole python file can be accessed on the corresponding <a class="reference external" href="https://github.com/AtomCalc/AtomCalc">GitHub page</a>.
+The tutorials can also be accessed on GitHub as <a class="reference external" href="https://github.com/AtomCalc/AtomCalc/tree/main/docs/notebooks">Jupyter notebooks</a>.</p>
+</section>
+<section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
+<p>AtomCalc can be installed with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">atomcalc</span></code>. Its dependencies are Matplotlib, SciPy, NumPy and QuTiP.</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Example1.html">1. Simulating a Raman transition with constant lasers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Example2.html">2. Simulating a Raman transition with laser pulses</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="notebooks/Example2.html#Trotter-decomposition-(excerpt-of-my-master-thesis)">2.1. Trotter decomposition (excerpt of my master thesis)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Example3.html">3. Conveniently shifting the first level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Example4.html">4. Motional state system</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Classes and Functions:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html"><code class="docutils literal notranslate"><span class="pre">Decay</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.Decay.rates"><code class="docutils literal notranslate"><span class="pre">Decay.rates</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.Decay.final_states"><code class="docutils literal notranslate"><span class="pre">Decay.final_states</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#atomcalc.Laser"><code class="docutils literal notranslate"><span class="pre">Laser</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.Laser.rabifreq"><code class="docutils literal notranslate"><span class="pre">Laser.rabifreq</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.Laser.frequency"><code class="docutils literal notranslate"><span class="pre">Laser.frequency</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.Laser.detuning"><code class="docutils literal notranslate"><span class="pre">Laser.detuning</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.Laser.couple"><code class="docutils literal notranslate"><span class="pre">Laser.couple</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.Laser.pulse"><code class="docutils literal notranslate"><span class="pre">Laser.pulse</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#atomcalc.Level"><code class="docutils literal notranslate"><span class="pre">Level</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.Level.energy"><code class="docutils literal notranslate"><span class="pre">Level.energy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#atomcalc.plot_pulse"><code class="docutils literal notranslate"><span class="pre">plot_pulse()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html#atomcalc.System"><code class="docutils literal notranslate"><span class="pre">System</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.System.levels"><code class="docutils literal notranslate"><span class="pre">System.levels</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.System.lasers"><code class="docutils literal notranslate"><span class="pre">System.lasers</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.System.decay"><code class="docutils literal notranslate"><span class="pre">System.decay</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.System.dim"><code class="docutils literal notranslate"><span class="pre">System.dim</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.System.simulate"><code class="docutils literal notranslate"><span class="pre">System.simulate()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.System.initial_state_index_list"><code class="docutils literal notranslate"><span class="pre">System.initial_state_index_list</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.System.level_to_print_max_value"><code class="docutils literal notranslate"><span class="pre">System.level_to_print_max_value</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.System.maxtime"><code class="docutils literal notranslate"><span class="pre">System.maxtime</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.System.delta_stark_shift"><code class="docutils literal notranslate"><span class="pre">System.delta_stark_shift</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.System.Diagonalization"><code class="docutils literal notranslate"><span class="pre">System.Diagonalization</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.System.plot_pop"><code class="docutils literal notranslate"><span class="pre">System.plot_pop</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.System.Trotterintervals"><code class="docutils literal notranslate"><span class="pre">System.Trotterintervals</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.System.points_per_TI"><code class="docutils literal notranslate"><span class="pre">System.points_per_TI</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#atomcalc.System.resolution"><code class="docutils literal notranslate"><span class="pre">System.resolution</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="notebooks/Example1.html" class="btn btn-neutral float-right" title="1. Simulating a Raman transition with constant lasers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Moritz Wilke.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

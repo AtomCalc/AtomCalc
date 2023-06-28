@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3. Conveniently shifting the first level &mdash; AtomCalc  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/nbsphinx-code-cells.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4. Motional state system" href="Example4.html" />
+    <link rel="prev" title="2. Simulating a Raman transition with laser pulses" href="Example2.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            AtomCalc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Example1.html">1. Simulating a Raman transition with constant lasers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Example2.html">2. Simulating a Raman transition with laser pulses</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Conveniently shifting the first level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Example4.html">4. Motional state system</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Classes and Functions:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html"><code class="docutils literal notranslate"><span class="pre">Decay</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html#atomcalc.Laser"><code class="docutils literal notranslate"><span class="pre">Laser</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html#atomcalc.Level"><code class="docutils literal notranslate"><span class="pre">Level</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html#atomcalc.plot_pulse"><code class="docutils literal notranslate"><span class="pre">plot_pulse()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html#atomcalc.System"><code class="docutils literal notranslate"><span class="pre">System</span></code></a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">AtomCalc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">3. </span>Conveniently shifting the first level</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/Example3.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Conveniently-shifting-the-first-level">
+<h1><span class="section-number">3. </span>Conveniently shifting the first level<a class="headerlink" href="#Conveniently-shifting-the-first-level" title="Permalink to this heading"></a></h1>
+<div class="line-block">
+<div class="line">There is a convenient way to consider an additional detuning of the first level. This is equivalent to shifting all levels except the first in the contrary direction of this detuning and changing only the frequency of the lasers coupling to the first level.</div>
+<div class="line">We look again at the Raman system with constant lasers and show how the shift is applied.</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">atomcalc</span> <span class="kn">import</span> <span class="n">Level</span><span class="p">,</span> <span class="n">Laser</span><span class="p">,</span> <span class="n">Decay</span><span class="p">,</span> <span class="n">System</span><span class="p">,</span> <span class="n">plot_pulse</span>
+</pre></div>
+</div>
+</div>
+<p>We define the same parameters as in the first example but with an additional detuning called <code class="docutils literal notranslate"><span class="pre">shift</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># define level objects</span>
+<span class="n">level1</span> <span class="o">=</span> <span class="n">Level</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">level2</span> <span class="o">=</span> <span class="n">Level</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">level3</span> <span class="o">=</span> <span class="n">Level</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># define decay object</span>
+<span class="n">decay</span> <span class="o">=</span> <span class="n">Decay</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[[</span><span class="n">level3</span><span class="p">,</span><span class="n">level1</span><span class="p">],[</span><span class="n">level3</span><span class="p">,</span><span class="n">level2</span><span class="p">]])</span> <span class="c1"># no decay</span>
+
+<span class="c1"># define parameters</span>
+<span class="n">Delta</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">delta</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">Omega1</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">Omega2</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">shift</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="c1"># &lt;--- new detuning</span>
+
+<span class="c1"># define lasers (sort level couples from low to high energy.)</span>
+<span class="n">laser1</span> <span class="o">=</span> <span class="n">Laser</span><span class="p">(</span><span class="n">Omega1</span><span class="p">,</span> <span class="n">Delta</span><span class="o">-</span><span class="n">shift</span><span class="p">,</span> <span class="p">[</span><span class="n">level1</span><span class="p">,</span><span class="n">level3</span><span class="p">])</span> <span class="c1"># &lt;--- Change the detuning of the laser coupling to level 1</span>
+<span class="n">laser2</span> <span class="o">=</span> <span class="n">Laser</span><span class="p">(</span><span class="n">Omega2</span><span class="p">,</span> <span class="n">Delta</span><span class="o">-</span><span class="n">delta</span><span class="p">,</span> <span class="p">[</span><span class="n">level2</span><span class="p">,</span><span class="n">level3</span><span class="p">])</span>
+
+<span class="c1"># define system (sort levels by energy in ascending order. The order of the lasers should not matter.)</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">System</span><span class="p">([</span><span class="n">level1</span><span class="p">,</span><span class="n">level2</span><span class="p">,</span><span class="n">level3</span><span class="p">],</span> <span class="p">[</span><span class="n">laser1</span><span class="p">,</span><span class="n">laser2</span><span class="p">],</span> <span class="n">decay</span><span class="p">)</span>
+
+<span class="c1"># draw the system in matplotlib</span>
+<span class="n">system</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example3_3_0.png" src="../_images/notebooks_Example3_3_0.png" />
+</div>
+</div>
+<div class="line-block">
+<div class="line">Note that the draw method shows this change only as a shorter line of Laser 1 that still originates from a non-detuned Level 1. Ideally it would draw this Laser 1 line from a detuning at the first level so that the dashed detuning lines D 1 and D 2 are on the same height again which is what the system represents. But the draw function is very rudimentary.</div>
+<div class="line">We use the <code class="docutils literal notranslate"><span class="pre">delta_stark_shift</span></code> argument of the simulate method to consider this shift in the simulation.</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculate and show the time evolution with the shift</span>
+<span class="n">system</span><span class="o">.</span><span class="n">simulate</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="n">Diagonalization</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">delta_stark_shift</span><span class="o">=</span><span class="n">shift</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Hamiltonian in the rotating frame: Quantum object: dims = [[3], [3]], shape = (3, 3), type = oper, isherm = True
+Qobj data =
+[[ 0.2  0.   0.5]
+ [ 0.   0.   0.5]
+ [ 0.5  0.5 20. ]]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_Example3_5_1.png" src="../_images/notebooks_Example3_5_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Maximum population of level 2:
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.015647914604337877
+</pre></div></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Example2.html" class="btn btn-neutral float-left" title="2. Simulating a Raman transition with laser pulses" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Example4.html" class="btn btn-neutral float-right" title="4. Motional state system" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Moritz Wilke.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

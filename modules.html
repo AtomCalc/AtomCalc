@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>&lt;no title&gt; &mdash; AtomCalc  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="4. Motional state system" href="notebooks/Example4.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            AtomCalc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Example1.html">1. Simulating a Raman transition with constant lasers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Example2.html">2. Simulating a Raman transition with laser pulses</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Example3.html">3. Conveniently shifting the first level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/Example4.html">4. Motional state system</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Classes and Functions:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">Decay</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.Decay.rates"><code class="docutils literal notranslate"><span class="pre">Decay.rates</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.Decay.final_states"><code class="docutils literal notranslate"><span class="pre">Decay.final_states</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#atomcalc.Laser"><code class="docutils literal notranslate"><span class="pre">Laser</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.Laser.rabifreq"><code class="docutils literal notranslate"><span class="pre">Laser.rabifreq</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.Laser.frequency"><code class="docutils literal notranslate"><span class="pre">Laser.frequency</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.Laser.detuning"><code class="docutils literal notranslate"><span class="pre">Laser.detuning</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.Laser.couple"><code class="docutils literal notranslate"><span class="pre">Laser.couple</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.Laser.pulse"><code class="docutils literal notranslate"><span class="pre">Laser.pulse</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#atomcalc.Level"><code class="docutils literal notranslate"><span class="pre">Level</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.Level.energy"><code class="docutils literal notranslate"><span class="pre">Level.energy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#atomcalc.plot_pulse"><code class="docutils literal notranslate"><span class="pre">plot_pulse()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#atomcalc.System"><code class="docutils literal notranslate"><span class="pre">System</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.System.levels"><code class="docutils literal notranslate"><span class="pre">System.levels</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.System.lasers"><code class="docutils literal notranslate"><span class="pre">System.lasers</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.System.decay"><code class="docutils literal notranslate"><span class="pre">System.decay</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.System.dim"><code class="docutils literal notranslate"><span class="pre">System.dim</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.System.simulate"><code class="docutils literal notranslate"><span class="pre">System.simulate()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.System.initial_state_index_list"><code class="docutils literal notranslate"><span class="pre">System.initial_state_index_list</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.System.level_to_print_max_value"><code class="docutils literal notranslate"><span class="pre">System.level_to_print_max_value</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.System.maxtime"><code class="docutils literal notranslate"><span class="pre">System.maxtime</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.System.delta_stark_shift"><code class="docutils literal notranslate"><span class="pre">System.delta_stark_shift</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.System.Diagonalization"><code class="docutils literal notranslate"><span class="pre">System.Diagonalization</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.System.plot_pop"><code class="docutils literal notranslate"><span class="pre">System.plot_pop</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.System.Trotterintervals"><code class="docutils literal notranslate"><span class="pre">System.Trotterintervals</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.System.points_per_TI"><code class="docutils literal notranslate"><span class="pre">System.points_per_TI</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#atomcalc.System.resolution"><code class="docutils literal notranslate"><span class="pre">System.resolution</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">AtomCalc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">&lt;no title&gt;</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <dl class="py class">
+<dt class="sig sig-object py" id="atomcalc.Decay">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">atomcalc.</span></span><span class="sig-name descname"><span class="pre">Decay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_states</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atomcalc/Decay.html#Decay"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atomcalc.Decay" title="Permalink to this definition"></a></dt>
+<dd><p>An object that describes the decay of the system with the decay rates and the respective transitions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rates</strong> (<em>list</em>) – value for <a class="reference internal" href="#atomcalc.Decay.rates" title="atomcalc.Decay.rates"><code class="xref py py-attr docutils literal notranslate"><span class="pre">rates</span></code></a></p></li>
+<li><p><strong>final_states</strong> (<em>list</em>) – value for <a class="reference internal" href="#atomcalc.Decay.final_states" title="atomcalc.Decay.final_states"><code class="xref py py-attr docutils literal notranslate"><span class="pre">final_states</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atomcalc.Decay.rates">
+<span class="sig-name descname"><span class="pre">rates</span></span><a class="headerlink" href="#atomcalc.Decay.rates" title="Permalink to this definition"></a></dt>
+<dd><p>A list of decay rates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atomcalc.Decay.final_states">
+<span class="sig-name descname"><span class="pre">final_states</span></span><a class="headerlink" href="#atomcalc.Decay.final_states" title="Permalink to this definition"></a></dt>
+<dd><p>A list of tupels of <a class="reference internal" href="#atomcalc.Level" title="atomcalc.Level"><code class="xref py py-class docutils literal notranslate"><span class="pre">Level</span></code></a> objects that assign the decay rates to a corresponding transition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Decay</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[[</span><span class="n">Level</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span> <span class="n">Level</span><span class="p">(</span><span class="mi">0</span><span class="p">)],</span> <span class="p">[</span><span class="n">Level</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">Level</span><span class="p">(</span><span class="mi">0</span><span class="p">)]])</span>
+<span class="go">The transition between Level(20) and Level(0) is assigned a decay rate of 0. The transition between Level(5) and Level(0) is assigned a decay rate of 1.</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="atomcalc.Laser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">atomcalc.</span></span><span class="sig-name descname"><span class="pre">Laser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rabifreq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detuning</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">couple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polarization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pulse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atomcalc/Laser.html#Laser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atomcalc.Laser" title="Permalink to this definition"></a></dt>
+<dd><p>An object that describes values for a laser: Rabi frequency, frequency, and coupled states.
+One laser only affects the one specific transition that is defined in the couple parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rabifreq</strong> (<em>number</em>) – value for <a class="reference internal" href="#atomcalc.Laser.rabifreq" title="atomcalc.Laser.rabifreq"><code class="xref py py-attr docutils literal notranslate"><span class="pre">rabifreq</span></code></a></p></li>
+<li><p><strong>detuning</strong> (<em>number</em>) – value for <a class="reference internal" href="#atomcalc.Laser.detuning" title="atomcalc.Laser.detuning"><code class="xref py py-attr docutils literal notranslate"><span class="pre">detuning</span></code></a></p></li>
+<li><p><strong>couple</strong> (<em>list</em>) – value for <a class="reference internal" href="#atomcalc.Laser.couple" title="atomcalc.Laser.couple"><code class="xref py py-attr docutils literal notranslate"><span class="pre">couple</span></code></a></p></li>
+<li><p><strong>pulse</strong> (<em>None</em><em> or </em><em>function</em><em> or </em><em>list</em>) – value for <a class="reference internal" href="#atomcalc.Laser.pulse" title="atomcalc.Laser.pulse"><code class="xref py py-attr docutils literal notranslate"><span class="pre">pulse</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atomcalc.Laser.rabifreq">
+<span class="sig-name descname"><span class="pre">rabifreq</span></span><a class="headerlink" href="#atomcalc.Laser.rabifreq" title="Permalink to this definition"></a></dt>
+<dd><p>Rabi frequency of the laser as angular frequency.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atomcalc.Laser.frequency">
+<span class="sig-name descname"><span class="pre">frequency</span></span><a class="headerlink" href="#atomcalc.Laser.frequency" title="Permalink to this definition"></a></dt>
+<dd><p>The angular frequency of the laser. Represents the energy gap of the transition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atomcalc.Laser.detuning">
+<span class="sig-name descname"><span class="pre">detuning</span></span><a class="headerlink" href="#atomcalc.Laser.detuning" title="Permalink to this definition"></a></dt>
+<dd><p>The detuning of the laser.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atomcalc.Laser.couple">
+<span class="sig-name descname"><span class="pre">couple</span></span><a class="headerlink" href="#atomcalc.Laser.couple" title="Permalink to this definition"></a></dt>
+<dd><p>A tupel of <a class="reference internal" href="#atomcalc.Level" title="atomcalc.Level"><code class="xref py py-class docutils literal notranslate"><span class="pre">Level</span></code></a> objects that assigns the laser to this transition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atomcalc.Laser.pulse">
+<span class="sig-name descname"><span class="pre">pulse</span></span><a class="headerlink" href="#atomcalc.Laser.pulse" title="Permalink to this definition"></a></dt>
+<dd><p>A time dependent function of the Rabi frequency of the laser OR a list of numbers describing a Rabi frequency pulse.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None or function or list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Laser</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="p">[</span><span class="n">Level</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="n">Level</span><span class="p">(</span><span class="mi">20</span><span class="p">)])</span>
+<span class="go">The transition between Level(20) and Level(0) is assigned a laser with Rabi frequency of 1 and a frequency of 100.</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Level couples need to be sorted by energy in ascending order.</p>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="atomcalc.Level">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">atomcalc.</span></span><span class="sig-name descname"><span class="pre">Level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atomcalc/Level.html#Level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atomcalc.Level" title="Permalink to this definition"></a></dt>
+<dd><p>An object that describes an energy level.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>energy</strong> (<em>number</em>) – value for <a class="reference internal" href="#atomcalc.Level.energy" title="atomcalc.Level.energy"><code class="xref py py-attr docutils literal notranslate"><span class="pre">energy</span></code></a></p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atomcalc.Level.energy">
+<span class="sig-name descname"><span class="pre">energy</span></span><a class="headerlink" href="#atomcalc.Level.energy" title="Permalink to this definition"></a></dt>
+<dd><p>The energy of the level given as angular frequency.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Level</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">This is a Level object with an energy of 5, given as an angular frequency.</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="atomcalc.plot_pulse">
+<span class="sig-prename descclassname"><span class="pre">atomcalc.</span></span><span class="sig-name descname"><span class="pre">plot_pulse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pulse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tlist</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atomcalc/plot_pulse.html#plot_pulse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atomcalc.plot_pulse" title="Permalink to this definition"></a></dt>
+<dd><p>A function to plot a pulse function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pulse</strong> (<em>function</em>) – A time dependent pulse function.</p></li>
+<li><p><strong>tlist</strong> (<em>list</em>) – A list of points in time where the pulse should be plotted.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="atomcalc.System">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">atomcalc.</span></span><span class="sig-name descname"><span class="pre">System</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">levels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lasers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decay</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atomcalc/System.html#System"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atomcalc.System" title="Permalink to this definition"></a></dt>
+<dd><p>An object that inherits all parameters used for simulation of the system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>levels</strong> (<em>list</em>) – value for <a class="reference internal" href="#atomcalc.System.levels" title="atomcalc.System.levels"><code class="xref py py-attr docutils literal notranslate"><span class="pre">levels</span></code></a></p></li>
+<li><p><strong>lasers</strong> (<em>list</em>) – value for <a class="reference internal" href="#atomcalc.System.lasers" title="atomcalc.System.lasers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">lasers</span></code></a></p></li>
+<li><p><strong>decay</strong> (<em>class object</em>) – value for <a class="reference internal" href="#atomcalc.System.decay" title="atomcalc.System.decay"><code class="xref py py-attr docutils literal notranslate"><span class="pre">decay</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atomcalc.System.levels">
+<span class="sig-name descname"><span class="pre">levels</span></span><a class="headerlink" href="#atomcalc.System.levels" title="Permalink to this definition"></a></dt>
+<dd><p>A list of <a class="reference internal" href="#atomcalc.Level" title="atomcalc.Level"><code class="xref py py-class docutils literal notranslate"><span class="pre">Level</span></code></a> objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atomcalc.System.lasers">
+<span class="sig-name descname"><span class="pre">lasers</span></span><a class="headerlink" href="#atomcalc.System.lasers" title="Permalink to this definition"></a></dt>
+<dd><p>A list of <a class="reference internal" href="#atomcalc.Laser" title="atomcalc.Laser"><code class="xref py py-class docutils literal notranslate"><span class="pre">Laser</span></code></a> objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atomcalc.System.decay">
+<span class="sig-name descname"><span class="pre">decay</span></span><a class="headerlink" href="#atomcalc.System.decay" title="Permalink to this definition"></a></dt>
+<dd><p>A <a class="reference internal" href="#atomcalc.Decay" title="atomcalc.Decay"><code class="xref py py-class docutils literal notranslate"><span class="pre">Decay</span></code></a> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>class object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atomcalc.System.dim">
+<span class="sig-name descname"><span class="pre">dim</span></span><a class="headerlink" href="#atomcalc.System.dim" title="Permalink to this definition"></a></dt>
+<dd><p>Number of levels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">level1</span> <span class="o">=</span> <span class="n">Level</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">level2</span> <span class="o">=</span> <span class="n">Level</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">level3</span> <span class="o">=</span> <span class="n">Level</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">laser1</span> <span class="o">=</span> <span class="n">Laser</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="p">[</span><span class="n">level1</span><span class="p">,</span><span class="n">level3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">laser2</span> <span class="o">=</span> <span class="n">Laser</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="p">[</span><span class="n">level2</span><span class="p">,</span><span class="n">level3</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">decay</span> <span class="o">=</span> <span class="n">Decay</span><span class="p">([</span><span class="mi">0</span><span class="p">],[[</span><span class="n">level3</span><span class="p">,</span><span class="n">level1</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">system</span> <span class="o">=</span> <span class="n">System</span><span class="p">([</span><span class="n">level1</span><span class="p">,</span> <span class="n">level2</span><span class="p">,</span> <span class="n">level3</span><span class="p">],</span> <span class="p">[</span><span class="n">laser1</span><span class="p">,</span><span class="n">laser2</span><span class="p">],</span> <span class="n">decay</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Levels need to be sorted by energy in ascending order.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="atomcalc.System.simulate">
+<span class="sig-name descname"><span class="pre">simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_state_index_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level_to_print_max_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxtime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_stark_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Diagonalization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_pop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Trotterintervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points_per_TI</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">250</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atomcalc/System.html#System.simulate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atomcalc.System.simulate" title="Permalink to this definition"></a></dt>
+<dd><p>A function to simulate the time evolution of the population of every level. It also returns the maximum population of specifically the level_to_print_max_value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>initial_state_index_list</strong> (<em>list</em>) – value for <a class="reference internal" href="#atomcalc.System.initial_state_index_list" title="atomcalc.System.initial_state_index_list"><code class="xref py py-attr docutils literal notranslate"><span class="pre">initial_state_index_list</span></code></a></p></li>
+<li><p><strong>level_to_print_max_value</strong> (<em>number</em>) – value for <a class="reference internal" href="#atomcalc.System.level_to_print_max_value" title="atomcalc.System.level_to_print_max_value"><code class="xref py py-attr docutils literal notranslate"><span class="pre">level_to_print_max_value</span></code></a></p></li>
+<li><p><strong>maxtime</strong> (<em>integer</em>) – value for <a class="reference internal" href="#atomcalc.System.maxtime" title="atomcalc.System.maxtime"><code class="xref py py-attr docutils literal notranslate"><span class="pre">maxtime</span></code></a></p></li>
+<li><p><strong>delta_stark_shift</strong> (<em>number</em>) – value for <a class="reference internal" href="#atomcalc.System.delta_stark_shift" title="atomcalc.System.delta_stark_shift"><code class="xref py py-attr docutils literal notranslate"><span class="pre">delta_stark_shift</span></code></a></p></li>
+<li><p><strong>Diagonalization</strong> (<em>bool</em>) – value for <a class="reference internal" href="#atomcalc.System.Diagonalization" title="atomcalc.System.Diagonalization"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Diagonalization</span></code></a></p></li>
+<li><p><strong>plot_pop</strong> (<em>bool</em>) – value for <a class="reference internal" href="#atomcalc.System.plot_pop" title="atomcalc.System.plot_pop"><code class="xref py py-attr docutils literal notranslate"><span class="pre">plot_pop</span></code></a></p></li>
+<li><p><strong>Trotterintervals</strong> (<em>number</em>) – value for <a class="reference internal" href="#atomcalc.System.Trotterintervals" title="atomcalc.System.Trotterintervals"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Trotterintervals</span></code></a></p></li>
+<li><p><strong>points_per_TI</strong> (<em>number</em>) – value for <a class="reference internal" href="#atomcalc.System.points_per_TI" title="atomcalc.System.points_per_TI"><code class="xref py py-attr docutils literal notranslate"><span class="pre">points_per_TI</span></code></a></p></li>
+<li><p><strong>resolution</strong> (<em>number</em>) – value for <a class="reference internal" href="#atomcalc.System.resolution" title="atomcalc.System.resolution"><code class="xref py py-attr docutils literal notranslate"><span class="pre">resolution</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atomcalc.System.initial_state_index_list">
+<span class="sig-name descname"><span class="pre">initial_state_index_list</span></span><a class="headerlink" href="#atomcalc.System.initial_state_index_list" title="Permalink to this definition"></a></dt>
+<dd><p>Initial population distribution. First entry denotes the population of the first level and so on. Length of the list needs to be equal to the level-count and the entries need to sum up to one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atomcalc.System.level_to_print_max_value">
+<span class="sig-name descname"><span class="pre">level_to_print_max_value</span></span><a class="headerlink" href="#atomcalc.System.level_to_print_max_value" title="Permalink to this definition"></a></dt>
+<dd><p>Just affects the output. Determines which levels population maximum is printed in the output. 0 is the first level.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atomcalc.System.maxtime">
+<span class="sig-name descname"><span class="pre">maxtime</span></span><a class="headerlink" href="#atomcalc.System.maxtime" title="Permalink to this definition"></a></dt>
+<dd><p>Maximum time the system is simulated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atomcalc.System.delta_stark_shift">
+<span class="sig-name descname"><span class="pre">delta_stark_shift</span></span><a class="headerlink" href="#atomcalc.System.delta_stark_shift" title="Permalink to this definition"></a></dt>
+<dd><p>Detuning of the first level.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atomcalc.System.Diagonalization">
+<span class="sig-name descname"><span class="pre">Diagonalization</span></span><a class="headerlink" href="#atomcalc.System.Diagonalization" title="Permalink to this definition"></a></dt>
+<dd><p>If False, simulate the system with the integration method ‘qutip.mesolve’ from QuTiP. If True, simulate the system using diagonalization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atomcalc.System.plot_pop">
+<span class="sig-name descname"><span class="pre">plot_pop</span></span><a class="headerlink" href="#atomcalc.System.plot_pop" title="Permalink to this definition"></a></dt>
+<dd><p>If False, do not show the population plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atomcalc.System.Trotterintervals">
+<span class="sig-name descname"><span class="pre">Trotterintervals</span></span><a class="headerlink" href="#atomcalc.System.Trotterintervals" title="Permalink to this definition"></a></dt>
+<dd><p>Only relevant if a pulse is given. Discretizes the pulse into a step function of <cite>Trotterintervals</cite> time intervals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atomcalc.System.points_per_TI">
+<span class="sig-name descname"><span class="pre">points_per_TI</span></span><a class="headerlink" href="#atomcalc.System.points_per_TI" title="Permalink to this definition"></a></dt>
+<dd><p>Only relevant if a pulse is given. Divides one trotterinterval in points_per_TI intervals. This determines the number of points calculated within one trotterinterval.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="atomcalc.System.resolution">
+<span class="sig-name descname"><span class="pre">resolution</span></span><a class="headerlink" href="#atomcalc.System.resolution" title="Permalink to this definition"></a></dt>
+<dd><p>Only relevant if Diagonalization = True and no pulse is given. Divides the simulation time interval into <cite>resolution</cite> uniformly distributed points of time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="notebooks/Example4.html" class="btn btn-neutral float-left" title="4. Motional state system" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Moritz Wilke.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
