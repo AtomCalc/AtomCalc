@@ -37,6 +37,7 @@ AtomCalc can be installed with ``pip install atomcalc``. Its dependencies are Ma
    notebooks/Example1
    notebooks/Example2
    notebooks/Example3
+   notebooks/Example4
 
 .. toctree::
    :maxdepth: 2
