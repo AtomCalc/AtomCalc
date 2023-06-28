@@ -13,7 +13,7 @@ The time evolution of the population of each level is then calculated with the `
 This project is supposed to be expanded and should be seen as a construction fundament.
 The methods used in the code are explained in my master thesis which can be obtained via the 5th institute of physics of the university of Stuttgart.
 
-The code is documented in the `Modules`_ section of this documentation. 
+The code is documented in the `Classes and Functions`_ section of this documentation. 
 The whole python file can be accessed on the corresponding `GitHub page`_.
 The tutorials can also be accessed on GitHub as `Jupyter notebooks`_.
 
@@ -21,7 +21,7 @@ The tutorials can also be accessed on GitHub as `Jupyter notebooks`_.
 
 .. _GitHub page: https://github.com/AtomCalc/AtomCalc
 .. _Jupyter notebooks: https://github.com/AtomCalc/AtomCalc/tree/main/docs/notebooks
-.. _Modules: https://atomcalc.github.io/AtomCalc/modules.html
+.. _Classes and Functions: https://atomcalc.github.io/AtomCalc/modules.html
 .. _here: https://atomcalc.github.io/AtomCalc/notebooks/Example4.html
 
 Installation
